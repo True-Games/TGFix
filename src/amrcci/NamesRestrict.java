@@ -24,8 +24,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerLoginEvent.Result;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class NamesRestrict implements Listener {
 
@@ -38,8 +37,8 @@ public class NamesRestrict implements Listener {
 		startPurgeTask();
 	}
 	
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-	public void onPlayerJoin(PlayerLoginEvent e)
+	@EventHandler(priority=EventPriority.LOWEST,ignoreCancelled=true)
+	public void onPlayerJoin(PlayerJoinEvent e)
 	{
 		String plname = e.getPlayer().getName();
 		
@@ -53,7 +52,7 @@ public class NamesRestrict implements Listener {
 		{
 			if (!playerlist.plnames.get(plname.toLowerCase()).equals(plname))
 			{
-				e.disallow(Result.KICK_OTHER, "Залогиньтесь используя ваш оригинальнй ник: "+playerlist.plnames.get(plname.toLowerCase())+" (Регистр букв важен)");
+				e.getPlayer().kickPlayer("Залогиньтесь используя ваш оригинальнй ник: "+playerlist.plnames.get(plname.toLowerCase())+". Регистр букв важен.");
 			}
 		} else
 		{
