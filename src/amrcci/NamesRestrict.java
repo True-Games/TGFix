@@ -21,10 +21,11 @@ import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import com.comphenix.protocol.Packets;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.injector.GamePhase;
 
 public class NamesRestrict implements Listener {
 
@@ -35,28 +36,51 @@ public class NamesRestrict implements Listener {
 		this.playerlist = config;
 		this.main = main;
 		startPurgeTask();
+		startPacketJoinListener();
 	}
 	
-	@EventHandler(priority=EventPriority.LOWEST,ignoreCancelled=true)
-	public void onPlayerJoin(PlayerJoinEvent e)
+	private void startPacketJoinListener()
 	{
-		String plname = e.getPlayer().getName();
+		main.getProtocolManager().addPacketListener(
+				new PacketAdapter(
+						PacketAdapter
+						.params(main, Packets.Client.HANDSHAKE)
+						.clientSide()
+						.optionIntercept()
+						.gamePhase(GamePhase.BOTH)
+				)
+				{
+					@Override
+					public void onPacketReceiving(PacketEvent e) 
+					{
+						String playername = e.getPacket().getStrings().getValues().get(0);
+						if (!allowedToJoin(playername))
+						{
+							e.setCancelled(true);
+							e.getPlayer().kickPlayer("Залогиньтесь используя ваш оригинальный ник: "+playerlist.plnames.get(playername.toLowerCase()));
+						}
+					}
+				});
+	}
+	
+	
+	private boolean allowedToJoin(String playername)
+	{
+		String playernamelc = playername.toLowerCase();
 		
-		if (!e.getPlayer().hasPermission("amrcci.restrictname")) 
+		if (playerlist.plnames.containsKey(playernamelc))
 		{
-			playerlist.plnames.remove(plname.toLowerCase());
-			return;
-		}
-		
-		if (playerlist.plnames.containsKey(plname.toLowerCase()))
-		{
-			if (!playerlist.plnames.get(plname.toLowerCase()).equals(plname))
+			if (!playerlist.plnames.get(playernamelc).equals(playername))
 			{
-				e.getPlayer().kickPlayer("Залогиньтесь используя ваш оригинальнй ник: "+playerlist.plnames.get(plname.toLowerCase())+". Регистр букв важен.");
+				return false;
+			} else
+			{
+				return true;
 			}
 		} else
 		{
-			playerlist.plnames.put(e.getPlayer().getName().toLowerCase(), e.getPlayer().getName());
+			playerlist.plnames.put(playernamelc, playername);
+			return true;
 		}
 	}
 	
@@ -69,14 +93,14 @@ public class NamesRestrict implements Listener {
 				while (main.isEnabled())
 				{
 					try {
-						Thread.sleep(60*60*1000);
+						Thread.sleep(10*60*1000);
 					} catch (InterruptedException e) {
 					}
 					try {
 						for (String plname : new HashSet<String>(playerlist.plnames.values()))
 						{
 							OfflinePlayer offpl = Bukkit.getOfflinePlayer(plname);
-							if (!offpl.isOnline() && System.currentTimeMillis() - offpl.getLastPlayed() > 4*24*60*60*1000)
+							if (!offpl.isOnline() && System.currentTimeMillis() - offpl.getLastPlayed() > 24*60*60*1000)
 							{
 								playerlist.plnames.remove(plname.toLowerCase());
 							}

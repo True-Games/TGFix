@@ -3,6 +3,7 @@ main: amrcci.Main
 version: 3.0
 author: _Shevchik_
 load: STARTUP
+depend: [ProtocolLib]
 commands:
   amrcci:
     description: amrcci commands

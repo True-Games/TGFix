@@ -20,6 +20,9 @@ package amrcci;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.ProtocolManager;
+
 public class Main  extends JavaPlugin {
 
 
@@ -27,11 +30,17 @@ public class Main  extends JavaPlugin {
 	private Commands commands;
 	private NamesRestrict nr;
 	private QuitListener ql;
+	private ProtocolManager protocolManager;
+	protected ProtocolManager getProtocolManager()
+	{
+		return protocolManager;
+	}
 
 	
 	@Override
 	public void onEnable()
 	{
+		protocolManager = ProtocolLibrary.getProtocolManager();
 		playerlist = new PlayerList();
 		playerlist.lpllist();
 		commands = new Commands(playerlist);
@@ -45,6 +54,8 @@ public class Main  extends JavaPlugin {
 	@Override
 	public void onDisable()
 	{
+		protocolManager.removePacketListeners(this);
+		protocolManager = null;
 		playerlist.spllist();
 		HandlerList.unregisterAll(this);
 		nr = null;
