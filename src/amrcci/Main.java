@@ -23,6 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
+//этот плагин служит сборищем фиксов для тех или иных вещей, чтобы не писать для этого отдельные плагины, я докидываю фиксы сюда.
 public class Main  extends JavaPlugin {
 
 
@@ -30,12 +31,12 @@ public class Main  extends JavaPlugin {
 	private Commands commands;
 	private NamesRestrict nr;
 	private QuitListener ql;
+	private VoidListener vl;
 	private ProtocolManager protocolManager;
 	protected ProtocolManager getProtocolManager()
 	{
 		return protocolManager;
 	}
-
 	
 	@Override
 	public void onEnable()
@@ -49,6 +50,8 @@ public class Main  extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(nr, this);
 		ql = new QuitListener();
 		getServer().getPluginManager().registerEvents(ql, this);
+		vl = new VoidListener();
+		getServer().getPluginManager().registerEvents(vl, this);
 	}
 	
 	@Override
@@ -60,6 +63,7 @@ public class Main  extends JavaPlugin {
 		HandlerList.unregisterAll(this);
 		nr = null;
 		ql = null;
+		vl = null;
 		commands = null;
 		playerlist = null;
 	}
