@@ -55,7 +55,15 @@ public class NamesRestrict implements Listener {
 					public void onPacketReceiving(PacketEvent e) 
 					{
 						String playername = e.getPacket().getStrings().getValues().get(0);
-						if (!allowedToJoin(playername))
+						String playernamelc = playername.toLowerCase();
+						//ad to list if player is not in list
+						if (!playerlist.plnames.containsKey(playernamelc))
+						{
+							addToList(playername, playernamelc);
+							return;
+						}
+						//check if player is alowed to join with this name
+						if (!isAllowedToJoin(playername, playernamelc))
 						{
 							e.setCancelled(true);
 							e.getPlayer().kickPlayer("Залогиньтесь используя ваш оригинальный ник: "+playerlist.plnames.get(playername.toLowerCase()));
@@ -64,23 +72,19 @@ public class NamesRestrict implements Listener {
 				});
 	}
 	
-	
-	private boolean allowedToJoin(String playername)
+	private void addToList(String playername, String playernamelc)
 	{
-		String playernamelc = playername.toLowerCase();
-		
-		if (playerlist.plnames.containsKey(playernamelc))
+		playerlist.plnames.put(playernamelc, playername);
+	}
+	
+	
+	private boolean isAllowedToJoin(String playername, String playernamelc)
+	{	
+		if (!playerlist.plnames.get(playernamelc).equals(playername))
 		{
-			if (!playerlist.plnames.get(playernamelc).equals(playername))
-			{
-				return false;
-			} else
-			{
-				return true;
-			}
+			return false;
 		} else
 		{
-			playerlist.plnames.put(playernamelc, playername);
 			return true;
 		}
 	}
