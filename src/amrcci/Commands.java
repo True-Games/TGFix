@@ -50,11 +50,11 @@ public class Commands implements CommandExecutor {
 				sender.sendMessage("Список игроков сохранён в файл");
 				return true;
 			} else
-			if (args.length == 3 && args[0].equalsIgnoreCase("changenameinlist"))
+			if (args.length == 2 && args[0].equalsIgnoreCase("changenameinlist"))
 			{
 				if (playerlist.plnames.containsKey(args[1].toLowerCase()))
 				{
-					playerlist.plnames.put(args[1].toLowerCase(), args[2]);
+					playerlist.plnames.put(args[1].toLowerCase(), args[1]);
 					sender.sendMessage("Имя в списке изменено");
 				} else
 				{
