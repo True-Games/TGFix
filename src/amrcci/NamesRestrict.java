@@ -22,6 +22,7 @@ import java.util.HashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.event.Listener;
+
 import com.comphenix.protocol.Packets;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
@@ -92,15 +93,12 @@ public class NamesRestrict implements Listener {
 			{
 				while (main.isEnabled())
 				{
-					try {
-						Thread.sleep(10*60*1000);
-					} catch (InterruptedException e) {
-					}
+					try {Thread.sleep(10*60*1000);} catch (InterruptedException e) {}
 					try {
 						for (String plname : new HashSet<String>(playerlist.plnames.values()))
 						{
 							OfflinePlayer offpl = Bukkit.getOfflinePlayer(plname);
-							if (!offpl.isOnline() && System.currentTimeMillis() - offpl.getLastPlayed() > 24*60*60*1000)
+							if (!offpl.isOnline() && !offpl.hasPlayedBefore())
 							{
 								playerlist.plnames.remove(plname.toLowerCase());
 							}

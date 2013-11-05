@@ -49,6 +49,17 @@ public class Commands implements CommandExecutor {
 				playerlist.spllist();
 				sender.sendMessage("Список игроков сохранён в файл");
 				return true;
+			} else
+			if (args.length == 3 && args[0].equalsIgnoreCase("changenameinlist"))
+			{
+				if (playerlist.plnames.containsKey(args[1].toLowerCase()))
+				{
+					playerlist.plnames.put(args[1].toLowerCase(), args[2]);
+					sender.sendMessage("Имя в списке изменено");
+				} else
+				{
+					sender.sendMessage("Данное имя не найдено в списке");
+				}
 			}
 		}
 		return false;
