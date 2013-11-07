@@ -32,7 +32,8 @@ public class Main  extends JavaPlugin {
 	private NamesRestrict nr;
 	private QuitListener ql;
 	private VoidListener vl;
-	private NoMinecartExplosionListener nmel;
+	private NoChainExplosion nce;
+	private DoorRecoil dr;
 	private ProtocolManager protocolManager;
 	protected ProtocolManager getProtocolManager()
 	{
@@ -53,8 +54,10 @@ public class Main  extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(ql, this);
 		vl = new VoidListener();
 		getServer().getPluginManager().registerEvents(vl, this);
-		nmel = new NoMinecartExplosionListener();
-		getServer().getPluginManager().registerEvents(nmel, this);
+		nce = new NoChainExplosion();
+		getServer().getPluginManager().registerEvents(nce, this);
+		dr = new DoorRecoil();
+		getServer().getPluginManager().registerEvents(dr, this);
 	}
 	
 	@Override
@@ -67,7 +70,8 @@ public class Main  extends JavaPlugin {
 		nr = null;
 		ql = null;
 		vl = null;
-		nmel = null;
+		nce = null;
+		dr = null;
 		commands = null;
 		playerlist = null;
 	}

@@ -8,7 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-public class NoMinecartExplosionListener implements Listener {
+public class NoChainExplosion implements Listener {
 	
 	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
 	public void onEntityExplode(EntityDamageByEntityEvent e)
