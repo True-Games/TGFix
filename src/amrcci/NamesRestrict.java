@@ -80,13 +80,7 @@ public class NamesRestrict implements Listener {
 	
 	private boolean isAllowedToJoin(String playername, String playernamelc)
 	{	
-		if (!playerlist.plnames.get(playernamelc).equals(playername))
-		{
-			return false;
-		} else
-		{
-			return true;
-		}
+		return playerlist.plnames.get(playernamelc).equals(playername);
 	}
 	
 	private void startPurgeTask()
