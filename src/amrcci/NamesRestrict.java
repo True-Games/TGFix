@@ -17,29 +17,61 @@
 
 package amrcci;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.event.Listener;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.comphenix.protocol.Packets;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.injector.GamePhase;
 
-public class NamesRestrict implements Listener {
+public class NamesRestrict {
 
-	private PlayerList playerlist;
 	private Main main;
-	public NamesRestrict(PlayerList config, Main main)
+	private File playerlist;
+	public NamesRestrict(Main main)
 	{
-		this.playerlist = config;
 		this.main = main;
+		this.playerlist = new File(main.getDataFolder(),"playerlist.yml");
+	}
+	public void start()
+	{
+		lpllist();
 		startPurgeTask();
 		startPacketJoinListener();
 	}
+	public void stop()
+	{
+		run = false;
+		spllist();
+	}
 	
+	protected void lpllist()
+	{
+		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerlist);
+		plnames.clear();
+		for (String name : cfg.getStringList("players"))
+		{
+			plnames.put(name.toLowerCase(), name);
+		}
+		spllist();
+	}
+	protected void spllist()
+	{
+		FileConfiguration cfg = new YamlConfiguration();
+		cfg.set("players", new ArrayList<String>(plnames.values()));
+		try {cfg.save(playerlist);} catch (IOException e) {e.printStackTrace();}
+	}
+	
+	protected ConcurrentHashMap<String, String> plnames = new  ConcurrentHashMap<String, String>();
 	private void startPacketJoinListener()
 	{
 		main.getProtocolManager().addPacketListener(
@@ -54,60 +86,46 @@ public class NamesRestrict implements Listener {
 					@Override
 					public void onPacketReceiving(PacketEvent e) 
 					{
-						String playername = e.getPacket().getStrings().getValues().get(0);
-						String playernamelc = playername.toLowerCase();
-						//ad to list if player is not in list
-						if (!playerlist.plnames.containsKey(playernamelc))
+						String joinname = e.getPacket().getStrings().getValues().get(0);
+						String lcname = joinname.toLowerCase();
+						if (!plnames.containsKey(lcname))
 						{
-							addToList(playername, playernamelc);
-							return;
-						}
-						//check if player is alowed to join with this name
-						if (!isAllowedToJoin(playername, playernamelc))
+							plnames.put(lcname, joinname);
+						} else
 						{
-							e.setCancelled(true);
-							e.getPlayer().kickPlayer("Залогиньтесь используя ваш оригинальный ник: "+playerlist.plnames.get(playername.toLowerCase()));
+							String realname = plnames.get(lcname);
+							if (!joinname.equals(realname))
+							{
+								e.setCancelled(true);
+								e.getPlayer().kickPlayer("Залогиньтесь используя ваш оригинальный ник: "+realname);
+							}
 						}
 					}
 				});
 	}
-	
-	private void addToList(String playername, String playernamelc)
-	{
-		playerlist.plnames.put(playernamelc, playername);
-	}
-	
-	
-	private boolean isAllowedToJoin(String playername, String playernamelc)
-	{	
-		return playerlist.plnames.get(playernamelc).equals(playername);
-	}
-	
+
+	private boolean run = true;
 	private void startPurgeTask()
 	{
-		Thread purgetask = new Thread()
+		new Thread()
 		{
 			public void run()
 			{
-				while (main.isEnabled())
+				while (run)
 				{
 					try {Thread.sleep(10*60*1000);} catch (InterruptedException e) {}
-					try {
-						for (String plname : new HashSet<String>(playerlist.plnames.values()))
+					if (!run) {return;}
+					for (String plname : new HashSet<String>(plnames.values()))
+					{
+						OfflinePlayer offpl = Bukkit.getOfflinePlayer(plname);
+						if (!offpl.isOnline() && !offpl.hasPlayedBefore())
 						{
-							OfflinePlayer offpl = Bukkit.getOfflinePlayer(plname);
-							if (!offpl.isOnline() && !offpl.hasPlayedBefore())
-							{
-								playerlist.plnames.remove(plname.toLowerCase());
-							}
+							plnames.remove(plname.toLowerCase());
 						}
-					} catch (Exception e) {
-						e.printStackTrace();
 					}
 				}
 			}
-		};
-		purgetask.start();
+		}.start();
 	}
 	
 }
