@@ -39,7 +39,7 @@ public class SpawnTeleport implements Listener {
 	public void onPlayerLoginAfterTeleport(AuthMeTeleportEvent e)
 	{
 		final Player player = e.getPlayer();
-		if (worlds.contains(player.getWorld().getName()) && !player.hasPermission("amrcci.ignoretp"))
+		if (worlds.contains(e.getTo().getWorld().getName()) && !player.hasPermission("amrcci.ignoretp"))
 		{
 			final Location spawn = AuthMe.getInstance().essentialsSpawn;
 			if (spawn != null)
