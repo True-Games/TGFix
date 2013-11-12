@@ -25,17 +25,14 @@ import com.comphenix.protocol.ProtocolManager;
 //этот плагин служит сборищем фиксов для тех или иных вещей, чтобы не писать для этого отдельные плагины, я докидываю фиксы сюда.
 public class Main extends JavaPlugin {
 
-	private Commands commands;
-	private NamesRestrict nr;
-	private QuitListener ql;
-	private VoidListener vl;
-	private NoChainExplosion nce;
-	private DoorRecoil dr;
-	private ProtocolManager protocolManager;
-	protected ProtocolManager getProtocolManager()
-	{
-		return protocolManager;
-	}
+	public Commands commands;
+	public NamesRestrict nr;
+	public QuitListener ql;
+	public VoidListener vl;
+	public NoChainExplosion nce;
+	public DoorRecoil dr;
+	public SpawnTeleport st;
+	public ProtocolManager protocolManager;
         
 	@Override
 	public void onEnable()
@@ -43,7 +40,7 @@ public class Main extends JavaPlugin {
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		nr = new NamesRestrict(this);
 		nr.start();
-		commands = new Commands(nr);
+		commands = new Commands(this);
 		getCommand("amrcci").setExecutor(commands);
 		ql = new QuitListener();
 		getServer().getPluginManager().registerEvents(ql, this);
@@ -53,6 +50,9 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(nce, this);
 		dr = new DoorRecoil();
 		getServer().getPluginManager().registerEvents(dr, this);
+		st = new SpawnTeleport(this);
+		st.loadConfig();
+		getServer().getPluginManager().registerEvents(st, this);
 	}
         
 	@Override
@@ -66,6 +66,7 @@ public class Main extends JavaPlugin {
 		vl = null;
 		nce = null;
 		dr = null;
+		st = null;
 		commands = null;
 	}
                 

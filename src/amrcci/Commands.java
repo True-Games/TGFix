@@ -26,10 +26,10 @@ import org.bukkit.entity.Player;
 
 public class Commands implements CommandExecutor {
 
-	private NamesRestrict nr;
-	public Commands(NamesRestrict nr)
+	private Main main;
+	public Commands(Main main)
 	{
-		this.nr = nr;
+		this.main = main;
 	}
 	
 	
@@ -40,27 +40,33 @@ public class Commands implements CommandExecutor {
 		{
 			if (args.length == 1 && args[0].equalsIgnoreCase("loadlist"))
 			{
-				nr.lpllist();
+				main.nr.lpllist();
 				sender.sendMessage("Список игроков загружен из файла");
 				return true;
 			} else
 			if (args.length == 1 && args[0].equalsIgnoreCase("savelist"))
 			{
-				nr.spllist();
+				main.nr.spllist();
 				sender.sendMessage("Список игроков сохранён в файл");
 				return true;
 			} else
 			if (args.length == 2 && args[0].equalsIgnoreCase("changenameinlist"))
 			{
-				if (nr.plnames.containsKey(args[1].toLowerCase()))
+				if (main.nr.plnames.containsKey(args[1].toLowerCase()))
 				{
-					nr.plnames.put(args[1].toLowerCase(), args[1]);
+					main.nr.plnames.put(args[1].toLowerCase(), args[1]);
 					sender.sendMessage("Имя в списке изменено");
 				} else
 				{
 					sender.sendMessage("Данное имя не найдено в списке");
 				}
 			}
+			if (args.length == 1 && args[0].equalsIgnoreCase("loadtpworlds"))
+			{
+				main.st.loadConfig();				
+				sender.sendMessage("Список миров загружен");
+				return true;
+			}	
 		}
 		return false;
 	}

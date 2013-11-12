@@ -74,7 +74,7 @@ public class NamesRestrict {
 	protected ConcurrentHashMap<String, String> plnames = new  ConcurrentHashMap<String, String>();
 	private void startPacketJoinListener()
 	{
-		main.getProtocolManager().addPacketListener(
+		main.protocolManager.addPacketListener(
 				new PacketAdapter(
 						PacketAdapter
 						.params(main, Packets.Client.HANDSHAKE)
