@@ -32,6 +32,7 @@ public class Main extends JavaPlugin {
 	public NoChainExplosion nce;
 	public DoorRecoil dr;
 	public SpawnTeleport st;
+	public NoGamemodeInteract ngi;
 	public ProtocolManager protocolManager;
         
 	@Override
@@ -53,6 +54,8 @@ public class Main extends JavaPlugin {
 		st = new SpawnTeleport(this);
 		st.loadConfig();
 		getServer().getPluginManager().registerEvents(st, this);
+		ngi = new NoGamemodeInteract();
+		getServer().getPluginManager().registerEvents(ngi, this);
 	}
         
 	@Override
