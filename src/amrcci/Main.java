@@ -33,6 +33,7 @@ public class Main extends JavaPlugin {
 	public DoorRecoil dr;
 	public SpawnTeleport st;
 	public NoGamemodeInteract ngi;
+	private ChatLimiter cl;
 	public ProtocolManager protocolManager;
         
 	@Override
@@ -56,6 +57,9 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(st, this);
 		ngi = new NoGamemodeInteract();
 		getServer().getPluginManager().registerEvents(ngi, this);
+		cl = new ChatLimiter(this);
+		cl.loadConfig();
+		getServer().getPluginManager().registerEvents(cl, this);
 	}
         
 	@Override
@@ -70,6 +74,7 @@ public class Main extends JavaPlugin {
 		nce = null;
 		dr = null;
 		st = null;
+		cl = null;
 		commands = null;
 	}
                 
