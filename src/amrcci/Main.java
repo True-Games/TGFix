@@ -19,9 +19,6 @@ package amrcci;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-
 //этот плагин служит сборищем фиксов для тех или иных вещей, чтобы не писать для этого отдельные плагины, я докидываю фиксы сюда.
 public class Main extends JavaPlugin {
 
@@ -34,14 +31,13 @@ public class Main extends JavaPlugin {
 	public SpawnTeleport st;
 	public NoGamemodeInteract ngi;
 	private ChatLimiter cl;
-	public ProtocolManager protocolManager;
         
 	@Override
 	public void onEnable()
 	{
-		protocolManager = ProtocolLibrary.getProtocolManager();
 		nr = new NamesRestrict(this);
 		nr.start();
+		getServer().getPluginManager().registerEvents(nr, this);
 		commands = new Commands(this);
 		getCommand("amrcci").setExecutor(commands);
 		ql = new QuitListener();
@@ -65,8 +61,6 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onDisable()
 	{
-		protocolManager.removePacketListeners(this);
-		protocolManager = null;
 		nr.stop();
 		nr = null;
 		ql = null;

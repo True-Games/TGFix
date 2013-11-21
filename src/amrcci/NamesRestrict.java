@@ -27,26 +27,23 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent.Result;
 
-import com.comphenix.protocol.Packets;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.injector.GamePhase;
+public class NamesRestrict implements Listener {
 
-public class NamesRestrict {
-
-	private Main main;
 	private File playerlist;
 	public NamesRestrict(Main main)
 	{
-		this.main = main;
 		this.playerlist = new File(main.getDataFolder(),"playerlist.yml");
 	}
 	public void start()
 	{
 		lpllist();
 		startPurgeTask();
-		startPacketJoinListener();
 	}
 	public void stop()
 	{
@@ -72,36 +69,23 @@ public class NamesRestrict {
 	}
 	
 	protected ConcurrentHashMap<String, String> plnames = new  ConcurrentHashMap<String, String>();
-	private void startPacketJoinListener()
+	
+	@EventHandler(priority=EventPriority.LOWEST)
+	public void onPlayerLogin(PlayerLoginEvent e)
 	{
-		main.protocolManager.addPacketListener(
-				new PacketAdapter(
-						PacketAdapter
-						.params(main, Packets.Client.HANDSHAKE)
-						.clientSide()
-						.optionIntercept()
-						.gamePhase(GamePhase.BOTH)
-				)
-				{
-					@Override
-					public void onPacketReceiving(PacketEvent e) 
-					{
-						String joinname = e.getPacket().getStrings().getValues().get(0);
-						String lcname = joinname.toLowerCase();
-						if (!plnames.containsKey(lcname))
-						{
-							plnames.put(lcname, joinname);
-						} else
-						{
-							String realname = plnames.get(lcname);
-							if (!joinname.equals(realname))
-							{
-								e.setCancelled(true);
-								e.getPlayer().kickPlayer("Залогиньтесь используя ваш оригинальный ник: "+realname);
-							}
-						}
-					}
-				});
+		String joinname = e.getPlayer().getName();
+		String lcname = joinname.toLowerCase();
+		if (!plnames.containsKey(lcname))
+		{
+			plnames.put(lcname, joinname);
+		} else
+		{
+			String realname = plnames.get(lcname);
+			if (!joinname.equals(realname))
+			{
+				e.disallow(Result.KICK_OTHER, "Залогиньтесь используя ваш оригинальный ник: "+realname);
+			}
+		}
 	}
 
 	private boolean run = true;
