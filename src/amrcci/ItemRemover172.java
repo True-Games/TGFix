@@ -22,7 +22,7 @@ import fr.xephi.authme.events.RestoreInventoryEvent;
 
 public class ItemRemover172 implements Listener {
 	
-	private HashSet<Integer> badids = new HashSet<Integer>(Arrays.asList(8, 9, 10, 11, 26, 34, 36, 43, 51, 55, 59, 60, 62, 63, 64, 68, 71, 74, 75, 83, 90, 92, 93, 94, 99, 100, 104, 105, 115, 117, 118, 119, 120, 124, 125, 127, 132, 140, 141, 142, 144, 149));
+	private HashSet<Integer> badids = new HashSet<Integer>(Arrays.asList(8, 9, 10, 11, 26, 34, 36, 43, 51, 55, 59, 60, 62, 63, 64, 68, 71, 74, 75, 83, 90, 92, 93, 94, 99, 100, 104, 105, 115, 117, 118, 119, 120, 124, 125, 127, 132, 140, 141, 142, 144, 149, 150));
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
 	public void onInventoryOpen(InventoryOpenEvent e)
