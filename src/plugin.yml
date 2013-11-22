@@ -1,6 +1,6 @@
 name: AMRCCI
 main: amrcci.Main
-version: 14.0
+version: 15.0
 author: _Shevchik_
 load: STARTUP
 depend: [ProtocolLib]
