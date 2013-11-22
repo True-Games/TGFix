@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -49,6 +50,18 @@ public class ItemRemover172 implements Listener {
 			{
 				dropsit.remove();
 			}
+		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
+	public void onItemPickup(PlayerPickupItemEvent e)
+	{
+		ItemStack item = e.getItem().getItemStack();
+		if (badids.contains(item.getTypeId()))
+		{
+			e.setCancelled(true);
+			e.getItem().remove();
 		}
 	}
 
