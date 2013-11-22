@@ -30,7 +30,8 @@ public class Main extends JavaPlugin {
 	public DoorRecoil dr;
 	public SpawnTeleport st;
 	public NoGamemodeInteract ngi;
-	private ChatLimiter cl;
+	public ItemRemover172 ir172;
+	public ChatLimiter cl;
         
 	@Override
 	public void onEnable()
@@ -53,6 +54,8 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(st, this);
 		ngi = new NoGamemodeInteract();
 		getServer().getPluginManager().registerEvents(ngi, this);
+		ir172 = new ItemRemover172();
+		getServer().getPluginManager().registerEvents(ir172, this);
 		cl = new ChatLimiter(this);
 		cl.loadConfig();
 		getServer().getPluginManager().registerEvents(cl, this);
@@ -68,6 +71,7 @@ public class Main extends JavaPlugin {
 		nce = null;
 		dr = null;
 		st = null;
+		ir172 = null;
 		cl = null;
 		commands = null;
 	}
