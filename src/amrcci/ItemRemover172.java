@@ -1,9 +1,11 @@
 package amrcci;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -15,6 +17,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import fr.xephi.authme.events.RestoreInventoryEvent;
 
 public class ItemRemover172 implements Listener {
 	
@@ -63,6 +67,23 @@ public class ItemRemover172 implements Listener {
 			e.setCancelled(true);
 			e.getItem().remove();
 		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
+	public void onAuthMeSetInventory(RestoreInventoryEvent e)
+	{
+		List<ItemStack> items = new ArrayList<ItemStack>(Arrays.asList(e.getInventory()));
+		Iterator<ItemStack> itemsit = items.iterator();
+		while (itemsit.hasNext())
+		{
+			ItemStack item = itemsit.next();
+			if (item != null && badids.contains(item.getTypeId()))
+			{
+				itemsit.remove();
+			}
+		}
+		e.setInventory(items.toArray(new ItemStack[items.size()]));
 	}
 
 }
