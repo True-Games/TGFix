@@ -51,7 +51,7 @@ public class ChatLimiter implements Listener {
 		{
 			if (System.currentTimeMillis()-playerspeaktime.get(playername) < msecdiff)
 			{
-				e.getPlayer().sendMessage(ChatColor.RED+"Можно говорить только раз в 5 секунд");
+				e.getPlayer().sendMessage(ChatColor.RED+"Можно говорить только раз в "+msecdiff/1000+" секунд");
 				e.setCancelled(true);
 				return;
 			} else

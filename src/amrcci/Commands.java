@@ -33,21 +33,33 @@ public class Commands implements CommandExecutor {
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
+	 */
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String arg2,
-			String[] args) {
+	public boolean onCommand(CommandSender sender, Command command, String arg2, String[] args) 
+	{
 		if (this.isAllowed(sender, command.getName(), args))
 		{
+			if (args.length == 1 && args[0].equalsIgnoreCase("help"))
+			{
+				sender.sendMessage("/amrcci loadlist - загрузить список игроков NamesRestrict из файла");
+				sender.sendMessage("/amrcci savelist - сохранить список игроков NamesRestrict в файл");
+				sender.sendMessage("/amrcci changenameinlist - сменить имя в списке NamesRestrict");
+				sender.sendMessage("/amrcci loadtpworlds - загрузить настройки SpawnTeleport");
+				sender.sendMessage("/amrcci loadchatlimits - загрузить настройки ChatLimiter");
+				return true;
+			}
 			if (args.length == 1 && args[0].equalsIgnoreCase("loadlist"))
 			{
 				main.nr.lpllist();
-				sender.sendMessage("Список игроков загружен из файла");
+				sender.sendMessage("Список игроков NamesRestrict загружен из файла");
 				return true;
 			} else
 			if (args.length == 1 && args[0].equalsIgnoreCase("savelist"))
 			{
 				main.nr.spllist();
-				sender.sendMessage("Список игроков сохранён в файл");
+				sender.sendMessage("Список игроков NamesRestrict сохранён в файл");
 				return true;
 			} else
 			if (args.length == 2 && args[0].equalsIgnoreCase("changenameinlist"))
@@ -55,18 +67,24 @@ public class Commands implements CommandExecutor {
 				if (main.nr.plnames.containsKey(args[1].toLowerCase()))
 				{
 					main.nr.plnames.put(args[1].toLowerCase(), args[1]);
-					sender.sendMessage("Имя в списке изменено");
+					sender.sendMessage("Имя в списке NamesRestrict изменено");
 				} else
 				{
-					sender.sendMessage("Данное имя не найдено в списке");
+					sender.sendMessage("Данное имя не найдено в списке NamesRestrict");
 				}
-			}
+			} else
 			if (args.length == 1 && args[0].equalsIgnoreCase("loadtpworlds"))
 			{
 				main.st.loadConfig();				
-				sender.sendMessage("Список миров загружен");
+				sender.sendMessage("Настройки SpawnTeleport загружены");
 				return true;
-			}	
+			} else
+			if (args.length == 2 && args[0].equalsIgnoreCase("loadchatlimits"))
+			{
+				main.cl.loadConfig();
+				sender.sendMessage("Настройки ChatLimiter загружены");
+				return true;
+			}
 		}
 		return false;
 	}
