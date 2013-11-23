@@ -32,10 +32,7 @@ public class Commands implements CommandExecutor {
 		this.main = main;
 	}
 	
-	
-	/* (non-Javadoc)
-	 * @see org.bukkit.command.CommandExecutor#onCommand(org.bukkit.command.CommandSender, org.bukkit.command.Command, java.lang.String, java.lang.String[])
-	 */
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String arg2, String[] args) 
 	{
@@ -45,6 +42,7 @@ public class Commands implements CommandExecutor {
 			{
 				sender.sendMessage("/amrcci loadlist - загрузить список игроков NamesRestrict из файла");
 				sender.sendMessage("/amrcci savelist - сохранить список игроков NamesRestrict в файл");
+				sender.sendMessage("/amrcci purgelist - очистить список игроков NamesRestrict от не играющих игроков");
 				sender.sendMessage("/amrcci changenameinlist - сменить имя в списке NamesRestrict");
 				sender.sendMessage("/amrcci loadtpworlds - загрузить настройки SpawnTeleport");
 				sender.sendMessage("/amrcci loadchatlimits - загрузить настройки ChatLimiter");
@@ -60,6 +58,12 @@ public class Commands implements CommandExecutor {
 			{
 				main.nr.spllist();
 				sender.sendMessage("Список игроков NamesRestrict сохранён в файл");
+				return true;
+			} else
+			if (args.length == 1 && args[0].equalsIgnoreCase("purgelist"))
+			{
+				main.nr.doPurge();
+				sender.sendMessage("Список игроков NamesRestrict очищен");
 				return true;
 			} else
 			if (args.length == 2 && args[0].equalsIgnoreCase("changenameinlist"))

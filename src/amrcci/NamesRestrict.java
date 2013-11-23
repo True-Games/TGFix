@@ -20,8 +20,8 @@ package amrcci;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -43,11 +43,9 @@ public class NamesRestrict implements Listener {
 	public void start()
 	{
 		lpllist();
-		startPurgeTask();
 	}
 	public void stop()
 	{
-		run = false;
 		spllist();
 	}
 	
@@ -68,8 +66,7 @@ public class NamesRestrict implements Listener {
 		try {cfg.save(playerlist);} catch (IOException e) {e.printStackTrace();}
 	}
 	
-	protected ConcurrentHashMap<String, String> plnames = new  ConcurrentHashMap<String, String>();
-	
+	protected HashMap<String, String> plnames = new HashMap<String, String>();
 	@EventHandler(priority=EventPriority.LOWEST)
 	public void onPlayerLogin(PlayerLoginEvent e)
 	{
@@ -88,28 +85,19 @@ public class NamesRestrict implements Listener {
 		}
 	}
 
-	private boolean run = true;
-	private void startPurgeTask()
-	{
-		new Thread()
-		{
-			public void run()
-			{
-				while (run)
-				{
-					try {Thread.sleep(10*60*1000);} catch (InterruptedException e) {}
-					if (!run) {return;}
-					for (String plname : new HashSet<String>(plnames.values()))
-					{
-						OfflinePlayer offpl = Bukkit.getOfflinePlayer(plname);
-						if (!offpl.isOnline() && !offpl.hasPlayedBefore())
-						{
-							plnames.remove(plname.toLowerCase());
-						}
-					}
-				}
-			}
-		}.start();
-	}
 	
+	public void doPurge()
+	{
+		Iterator<String> namesit = plnames.values().iterator();
+		while (namesit.hasNext())
+		{
+			String name = namesit.next();
+			OfflinePlayer offpl = Bukkit.getOfflinePlayer(name);
+			if (!offpl.isOnline() && !offpl.hasPlayedBefore())
+			{
+				namesit.remove();
+			}
+		}
+	}
+
 }
