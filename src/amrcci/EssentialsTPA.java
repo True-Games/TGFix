@@ -23,12 +23,10 @@ public class EssentialsTPA implements Listener {
 		if (cmds[0].equalsIgnoreCase("/tpaccept"))
 		{
 			try {
-				Method getUserMethodPlayer = ess.getClass().getDeclaredMethod("getUser", Player.class);
-				getUserMethodPlayer.setAccessible(true);
-				Method getUserMethodString = ess.getClass().getDeclaredMethod("getUser", String.class);
-				getUserMethodString.setAccessible(true);
-				User essuser = (User) getUserMethodPlayer.invoke(ess, event.getPlayer());
-				User requester = (User) getUserMethodString.invoke(ess, essuser.getTeleportRequest());
+				Method getUserMethod = ess.getClass().getDeclaredMethod("getUser", Player.class);
+				getUserMethod.setAccessible(true);
+				User essuser = (User) getUserMethod.invoke(ess, event.getPlayer());
+				User requester = (User) getUserMethod.invoke(ess, Bukkit.getPlayerExact(essuser.getTeleportRequest()));
 				if (requester != null && requester.isOnline())
 				{
 					PlayerCommandPreprocessEvent fakeevent = new PlayerCommandPreprocessEvent(requester.getPlayer(), "/faketpaccept");
