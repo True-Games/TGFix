@@ -1,6 +1,7 @@
 package amrcci;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -21,18 +22,14 @@ public class EssentialsTPA implements Listener {
 		{
 			try {
 				User essuser = ess.getUser(event.getPlayer());
-				String steleporter = essuser.getTeleportRequest();
-				if (steleporter != null)
+				Player requester = Bukkit.getPlayerExact(essuser.getTeleportRequest());
+				if (requester!= null)
 				{
-					User requester = ess.getUser(Bukkit.getPlayerExact(steleporter));
-					if (requester != null && requester.isOnline())
+					PlayerCommandPreprocessEvent fakeevent = new PlayerCommandPreprocessEvent(requester, "/faketpaccept");
+					Bukkit.getPluginManager().callEvent(fakeevent);
+					if (fakeevent.isCancelled())
 					{
-						PlayerCommandPreprocessEvent fakeevent = new PlayerCommandPreprocessEvent(requester.getPlayer(), "/faketpaccept");
-						Bukkit.getPluginManager().callEvent(fakeevent);
-						if (fakeevent.isCancelled())
-						{
-							event.setCancelled(true);
-						}
+						event.setCancelled(true);
 					}
 				}
 			} catch (Exception e) {
