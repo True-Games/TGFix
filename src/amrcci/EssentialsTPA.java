@@ -1,9 +1,6 @@
 package amrcci;
 
-import java.lang.reflect.Method;
-
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,17 +20,19 @@ public class EssentialsTPA implements Listener {
 		if (cmds[0].equalsIgnoreCase("/tpaccept"))
 		{
 			try {
-				Method getUserMethod = ess.getClass().getDeclaredMethod("getUser", Player.class);
-				getUserMethod.setAccessible(true);
-				User essuser = (User) getUserMethod.invoke(ess, event.getPlayer());
-				User requester = (User) getUserMethod.invoke(ess, Bukkit.getPlayerExact(essuser.getTeleportRequest()));
-				if (requester != null && requester.isOnline())
+				User essuser = ess.getUser(event.getPlayer());
+				String steleporter = essuser.getTeleportRequest();
+				if (steleporter != null)
 				{
-					PlayerCommandPreprocessEvent fakeevent = new PlayerCommandPreprocessEvent(requester.getPlayer(), "/faketpaccept");
-					Bukkit.getPluginManager().callEvent(fakeevent);
-					if (fakeevent.isCancelled())
+					User requester = ess.getUser(Bukkit.getPlayerExact(steleporter));
+					if (requester != null && requester.isOnline())
 					{
-						event.setCancelled(true);
+						PlayerCommandPreprocessEvent fakeevent = new PlayerCommandPreprocessEvent(requester.getPlayer(), "/faketpaccept");
+						Bukkit.getPluginManager().callEvent(fakeevent);
+						if (fakeevent.isCancelled())
+						{
+							event.setCancelled(true);
+						}
 					}
 				}
 			} catch (Exception e) {
