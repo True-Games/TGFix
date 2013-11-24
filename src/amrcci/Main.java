@@ -17,19 +17,21 @@
 
 package amrcci;
 
+import java.io.File;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 //этот плагин служит сборищем фиксов для тех или иных вещей, чтобы не писать для этого отдельные плагины, я докидываю фиксы сюда.
 public class Main extends JavaPlugin {
 
 	public Commands commands;
+	public Config config;
 	public NamesRestrict nr;
-	public QuitListener ql;
-	public VoidListener vl;
-	public NoChainExplosion nce;
+	public QuitGamemodeChanger ql;
+	public NoChainEntityExplosion nce;
 	public DoorRecoil dr;
-	public SpawnTeleport st;
-	public NoGamemodeInteract ngi;
+	public JoinSpawnTeleport st;
+	public NoCreativeHorseInteract ngi;
 	public EssentialsTPA etp;
 	public ItemRemover172 ir172;
 	public ChatLimiter cl;
@@ -37,46 +39,44 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable()
 	{
-		nr = new NamesRestrict(this);
-		nr.start();
+		config = new Config(new File(this.getDataFolder(),"config.yml"));
+		config.loadConfig();
+		nr = new NamesRestrict(this, config);
+		nr.lpllist();
 		getServer().getPluginManager().registerEvents(nr, this);
 		commands = new Commands(this);
 		getCommand("amrcci").setExecutor(commands);
-		ql = new QuitListener();
+		ql = new QuitGamemodeChanger(config);
 		getServer().getPluginManager().registerEvents(ql, this);
-		vl = new VoidListener();
-		getServer().getPluginManager().registerEvents(vl, this);
-		nce = new NoChainExplosion();
+		nce = new NoChainEntityExplosion(config);
 		getServer().getPluginManager().registerEvents(nce, this);
-		dr = new DoorRecoil();
+		dr = new DoorRecoil(config);
 		getServer().getPluginManager().registerEvents(dr, this);
-		st = new SpawnTeleport(this);
-		st.loadConfig();
+		st = new JoinSpawnTeleport(this, config);
 		getServer().getPluginManager().registerEvents(st, this);
-		ngi = new NoGamemodeInteract();
+		ngi = new NoCreativeHorseInteract(config);
 		getServer().getPluginManager().registerEvents(ngi, this);
-		etp = new EssentialsTPA();
+		etp = new EssentialsTPA(config);
 		getServer().getPluginManager().registerEvents(etp, this);
-		ir172 = new ItemRemover172();
+		ir172 = new ItemRemover172(config);
 		getServer().getPluginManager().registerEvents(ir172, this);
-		cl = new ChatLimiter(this);
-		cl.loadConfig();
+		cl = new ChatLimiter(this, config);
 		getServer().getPluginManager().registerEvents(cl, this);
 	}
         
 	@Override
 	public void onDisable()
 	{
-		nr.stop();
+		nr.spllist();
 		nr = null;
 		ql = null;
-		vl = null;
 		nce = null;
 		dr = null;
 		st = null;
 		ir172 = null;
 		cl = null;
 		commands = null;
+		config = null;
 	}
                 
 }

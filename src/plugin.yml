@@ -1,9 +1,8 @@
 name: AMRCCI
 main: amrcci.Main
-version: 18.0
+version: 19.0
 author: _Shevchik_
 load: STARTUP
-depend: [ProtocolLib]
 commands:
   amrcci:
     description: amrcci commands

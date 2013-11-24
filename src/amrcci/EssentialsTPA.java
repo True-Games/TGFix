@@ -1,3 +1,20 @@
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * 
+ */
+
 package amrcci;
 
 import org.bukkit.Bukkit;
@@ -12,24 +29,35 @@ import com.earth2me.essentials.User;
 
 public class EssentialsTPA implements Listener {
 
-	Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+	private Config config;
+	public EssentialsTPA(Config config)
+	{
+		this.config = config;
+	}
 	
 	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
 	public void onEssTPA(PlayerCommandPreprocessEvent event)
 	{
+		if (!config.essentialstpaenabled) {return;}
+		
 		final String[] cmds = event.getMessage().split("\\s+");
 		if (cmds[0].equalsIgnoreCase("/tpaccept"))
 		{
+			Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 			try {
 				User essuser = ess.getUser(event.getPlayer());
-				Player requester = Bukkit.getPlayerExact(essuser.getTeleportRequest());
-				if (requester!= null)
+				String srequester = essuser.getTeleportRequest();
+				if (srequester != null)
 				{
-					PlayerCommandPreprocessEvent fakeevent = new PlayerCommandPreprocessEvent(requester, "/faketpaccept");
-					Bukkit.getPluginManager().callEvent(fakeevent);
-					if (fakeevent.isCancelled())
+					Player requester = Bukkit.getPlayerExact(srequester);
+					if (requester!= null)
 					{
-						event.setCancelled(true);
+						PlayerCommandPreprocessEvent fakeevent = new PlayerCommandPreprocessEvent(requester, "/faketpaccept");
+						Bukkit.getPluginManager().callEvent(fakeevent);
+						if (fakeevent.isCancelled())
+						{
+							event.setCancelled(true);
+						}
 					}
 				}
 			} catch (Exception e) {

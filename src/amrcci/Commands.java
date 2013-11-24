@@ -44,8 +44,7 @@ public class Commands implements CommandExecutor {
 				sender.sendMessage("/amrcci savelist - сохранить список игроков NamesRestrict в файл");
 				sender.sendMessage("/amrcci purgelist - очистить список игроков NamesRestrict от не играющих игроков");
 				sender.sendMessage("/amrcci changenameinlist - сменить имя в списке NamesRestrict");
-				sender.sendMessage("/amrcci loadtpworlds - загрузить настройки SpawnTeleport");
-				sender.sendMessage("/amrcci loadchatlimits - загрузить настройки ChatLimiter");
+				sender.sendMessage("/amrcci reload - перезагрузить конфиг");
 				return true;
 			}
 			if (args.length == 1 && args[0].equalsIgnoreCase("loadlist"))
@@ -76,17 +75,12 @@ public class Commands implements CommandExecutor {
 				{
 					sender.sendMessage("Данное имя не найдено в списке NamesRestrict");
 				}
-			} else
-			if (args.length == 1 && args[0].equalsIgnoreCase("loadtpworlds"))
-			{
-				main.st.loadConfig();				
-				sender.sendMessage("Настройки SpawnTeleport загружены");
 				return true;
 			} else
-			if (args.length == 2 && args[0].equalsIgnoreCase("loadchatlimits"))
+			if (args.length == 1 && args[0].equalsIgnoreCase("reload"))
 			{
-				main.cl.loadConfig();
-				sender.sendMessage("Настройки ChatLimiter загружены");
+				main.config.loadConfig();
+				sender.sendMessage("Конфиг перезагружен");
 				return true;
 			}
 		}

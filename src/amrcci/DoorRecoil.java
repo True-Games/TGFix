@@ -28,9 +28,17 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class DoorRecoil implements Listener {
 	
+	private Config config;
+	public DoorRecoil(Config config)
+	{
+		this.config = config;
+	}
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerOpenDoor(PlayerInteractEvent e) 
 	{
+		if (!config.doorrecoilenabled) {return;}
+		
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK && isDoor(e.getClickedBlock()) && e.isCancelled())
 		{
 			Player player = e.getPlayer();
@@ -46,7 +54,7 @@ public class DoorRecoil implements Listener {
 	
 	private boolean isDoor(Block b)
 	{
-		return b.getType() == Material.WOODEN_DOOR || b.getType() == Material.IRON_DOOR;
+		return b.getType() == Material.WOODEN_DOOR;
 	}
 
 }

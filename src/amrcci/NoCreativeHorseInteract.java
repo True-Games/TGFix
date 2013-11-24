@@ -25,11 +25,19 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
-public class NoGamemodeInteract implements Listener {
+public class NoCreativeHorseInteract implements Listener {
+	
+	private Config config;
+	public NoCreativeHorseInteract(Config config)
+	{
+		this.config = config;
+	}
 	
 	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
 	public void onInteractEntity(PlayerInteractEntityEvent e)
 	{
+		if (!config.nocreativehorseinteractenabled) {return;}
+
 		if (e.getPlayer().getGameMode() == GameMode.CREATIVE)
 		{
 			if (e.getRightClicked().getType() == EntityType.HORSE)

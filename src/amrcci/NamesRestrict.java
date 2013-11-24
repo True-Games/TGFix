@@ -35,18 +35,12 @@ import org.bukkit.event.player.PlayerLoginEvent.Result;
 
 public class NamesRestrict implements Listener {
 
+	private Config config;
 	private File playerlist;
-	public NamesRestrict(Main main)
+	public NamesRestrict(Main main, Config config)
 	{
+		this.config = config;
 		this.playerlist = new File(main.getDataFolder(),"playerlist.yml");
-	}
-	public void start()
-	{
-		lpllist();
-	}
-	public void stop()
-	{
-		spllist();
 	}
 	
 	protected void lpllist()
@@ -70,6 +64,8 @@ public class NamesRestrict implements Listener {
 	@EventHandler(priority=EventPriority.LOWEST)
 	public void onPlayerLogin(PlayerLoginEvent e)
 	{
+		if (!config.namesrestrictenabled) {return;}
+		
 		String joinname = e.getPlayer().getName();
 		String lcname = joinname.toLowerCase();
 		if (!plnames.containsKey(lcname))

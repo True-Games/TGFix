@@ -18,27 +18,26 @@
 package amrcci;
 
 import org.bukkit.GameMode;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.player.PlayerQuitEvent;
 
-public class VoidListener implements Listener {
+public class QuitGamemodeChanger implements Listener {
 	
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-	public void onPlayerFallInVoid(EntityDamageEvent e)
+	private Config config;
+	public QuitGamemodeChanger(Config config)
 	{
-		if (e.getCause() == DamageCause.VOID && e.getEntity() instanceof Player)
-		{
-			Player player = (Player) e.getEntity();
-			if (!player.hasPermission("amrcci.ignorevoid"))
-			{
-				player.setGameMode(GameMode.SURVIVAL);
-				player.damage(player.getHealth());
-			}
-		}
+		this.config = config;
 	}
 	
+	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+	public void onPlayerQuit(PlayerQuitEvent e)
+	{
+		if (!config.quitgamemodechangerenabled) {return;} 
+		if (e.getPlayer().hasPermission("amrcci.ignoregm")) {return;}
+			
+		e.getPlayer().setGameMode(GameMode.SURVIVAL);
+	}
+
 }

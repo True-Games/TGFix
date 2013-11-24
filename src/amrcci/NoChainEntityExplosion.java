@@ -17,20 +17,33 @@
 
 package amrcci;
 
-import org.bukkit.GameMode;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Minecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
-public class QuitListener implements Listener {
+public class NoChainEntityExplosion implements Listener {
 	
-	@EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-	public void onPlayerQuit(PlayerQuitEvent e)
-	{		
-		if (e.getPlayer().hasPermission("amrcci.ignoregm")) {return;}
-			
-		e.getPlayer().setGameMode(GameMode.SURVIVAL);
+	private Config config;
+	public NoChainEntityExplosion(Config config)
+	{
+		this.config = config;
 	}
-
+	
+	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
+	public void onEntityExplode(EntityDamageByEntityEvent e)
+	{
+		if (!config.nochainentityexplosionenabled) {return;}
+		
+		if (e.getCause() == DamageCause.ENTITY_EXPLOSION || e.getCause() == DamageCause.BLOCK_EXPLOSION)
+		{
+			if (e.getEntity() instanceof Minecart || e.getEntity() instanceof Creeper)
+			{
+				e.setCancelled(true);
+			}
+		}
+	}
 }

@@ -1,13 +1,26 @@
+/**
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * 
+ */
+
 package amrcci;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -16,42 +29,28 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 public class ChatLimiter implements Listener {
 
 	private Main main;
-	private File configfile;
-	public ChatLimiter(Main main)
+	private Config config;
+	public ChatLimiter(Main main, Config config)
 	{
 		this.main = main;
-		this.configfile = new File(main.getDataFolder(),"chatlimiterconfig.yml");
+		this.config = config;
 	}
 	
 	private ConcurrentHashMap<String, Long> playerspeaktime = new ConcurrentHashMap<String, Long>();
 	private ConcurrentHashMap<String, Integer> playerspeakcount = new ConcurrentHashMap<String, Integer>();
-	
-	private boolean enabled = true;
-	private int msecdiff = 5000;
-	private int maxmessagecount = 120;
-	public void loadConfig()
-	{
-		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
-		enabled = config.getBoolean("enabled",enabled);
-		msecdiff = config.getInt("msecdiff",msecdiff);
-		maxmessagecount = config.getInt("maxmessagecount",maxmessagecount);
-		config.set("enabled",enabled);
-		config.set("msecdiff",msecdiff);
-		config.set("maxmessagecount",maxmessagecount);
-		try {config.save(configfile);} catch (IOException e) {}
-	}
+
 	
 	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
 	public void onChat(AsyncPlayerChatEvent e)
 	{
-		if (!enabled) {return;}
+		if (!config.chatlimiterenabled) {return;}
 		
 		final String playername = e.getPlayer().getName();
 		if (playerspeaktime.containsKey(playername))
 		{
-			if (System.currentTimeMillis()-playerspeaktime.get(playername) < msecdiff)
+			if (System.currentTimeMillis()-playerspeaktime.get(playername) < config.chatlimitermsecdiff)
 			{
-				e.getPlayer().sendMessage(ChatColor.RED+"Можно говорить только раз в "+msecdiff/1000+" секунд");
+				e.getPlayer().sendMessage(ChatColor.RED+"Можно говорить только раз в "+config.chatlimitermsecdiff+" секунд");
 				e.setCancelled(true);
 				return;
 			} else
@@ -64,7 +63,7 @@ public class ChatLimiter implements Listener {
 		}
 		if (playerspeakcount.containsKey(playername))
 		{
-			if (playerspeakcount.get(playername) > maxmessagecount)
+			if (playerspeakcount.get(playername) > config.chatlimitermaxmessagecount)
 			{
 				e.getPlayer().sendMessage(ChatColor.RED+"Вы исчерпали свой лимит сообщений на этот час");
 				e.setCancelled(true);
