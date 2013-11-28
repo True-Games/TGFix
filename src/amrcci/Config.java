@@ -50,6 +50,8 @@ public class Config {
 	
 	public boolean namesrestrictenabled = true;
 	
+	public boolean nicknamelimiterenabled = true;
+	
 	public boolean nochainentityexplosionenabled = true;
 	
 	public boolean nocreativehorseinteractenabled = true;

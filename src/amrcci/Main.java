@@ -27,6 +27,7 @@ public class Main extends JavaPlugin {
 	public Commands commands;
 	public Config config;
 	public NamesRestrict nr;
+	public NicknameLimiter nl;
 	public QuitGamemodeChanger ql;
 	public VoidListener vl;
 	public NoChainEntityExplosion nce;
@@ -42,11 +43,13 @@ public class Main extends JavaPlugin {
 	{
 		config = new Config(new File(this.getDataFolder(),"config.yml"));
 		config.loadConfig();
+		commands = new Commands(this);
+		getCommand("amrcci").setExecutor(commands);
 		nr = new NamesRestrict(this, config);
 		nr.lpllist();
 		getServer().getPluginManager().registerEvents(nr, this);
-		commands = new Commands(this);
-		getCommand("amrcci").setExecutor(commands);
+		nl = new NicknameLimiter(config);
+		getServer().getPluginManager().registerEvents(nl, this);
 		ql = new QuitGamemodeChanger(config);
 		getServer().getPluginManager().registerEvents(ql, this);
 		nce = new NoChainEntityExplosion(config);
@@ -74,6 +77,7 @@ public class Main extends JavaPlugin {
 		nr = null;
 		vl = null;
 		ql = null;
+		nl = null;
 		nce = null;
 		dr = null;
 		st = null;

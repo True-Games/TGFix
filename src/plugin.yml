@@ -1,6 +1,6 @@
 name: AMRCCI
 main: amrcci.Main
-version: 20.0
+version: 21.0
 author: _Shevchik_
 load: STARTUP
 commands:
