@@ -21,8 +21,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class VoidListener implements Listener {
 
@@ -32,20 +32,19 @@ public class VoidListener implements Listener {
 		this.config = config;
 	}
 	
-	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
-	public void onDamageByVoid(EntityDamageByEntityEvent e)
+	@EventHandler(priority=EventPriority.LOWEST,ignoreCancelled=true)
+	public void onDamageByVoid(PlayerDeathEvent e)
 	{
 		if (!config.voidlistenerenabled) {return;}
 		
-		if (e.getCause() == DamageCause.VOID)
+		Player player = e.getEntity();
+		if (player.getLastDamageCause() != null) 
 		{
-			if (e.getEntity() instanceof Player)
-			{
-				Player player = (Player) e.getEntity();
-				player.getInventory().clear();
-				player.getInventory().setArmorContents(null);
-			}
-		}
+            if (player.getLastDamageCause().getCause() == DamageCause.VOID) 
+            {
+                e.getDrops().clear();
+            }
+        }
 	}
 	
 }
