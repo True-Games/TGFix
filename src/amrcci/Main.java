@@ -28,6 +28,7 @@ public class Main extends JavaPlugin {
 	public Config config;
 	public NamesRestrict nr;
 	public QuitGamemodeChanger ql;
+	public VoidListener vl;
 	public NoChainEntityExplosion nce;
 	public DoorRecoil dr;
 	public JoinSpawnTeleport st;
@@ -50,6 +51,8 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(ql, this);
 		nce = new NoChainEntityExplosion(config);
 		getServer().getPluginManager().registerEvents(nce, this);
+		vl = new VoidListener(config);
+		getServer().getPluginManager().registerEvents(vl, this);
 		dr = new DoorRecoil(config);
 		getServer().getPluginManager().registerEvents(dr, this);
 		st = new JoinSpawnTeleport(this, config);
@@ -69,6 +72,7 @@ public class Main extends JavaPlugin {
 	{
 		nr.spllist();
 		nr = null;
+		vl = null;
 		ql = null;
 		nce = null;
 		dr = null;

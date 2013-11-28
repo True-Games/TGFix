@@ -38,6 +38,8 @@ public class Config {
 	public int chatlimitermaxmessagecount = 120;
 	
 	public boolean doorrecoilenabled = true;
+
+	public boolean voidlistenerenabled = true;
 	
 	public boolean essentialstpaenabled = true;
 	
@@ -64,6 +66,8 @@ public class Config {
 		
 		doorrecoilenabled = config.getBoolean("doorrecoil.enabled",doorrecoilenabled);
 		
+		voidlistenerenabled = config.getBoolean("voidlistener.enabled",voidlistenerenabled);
+		
 		essentialstpaenabled = config.getBoolean("essentialstpa.enabled",essentialstpaenabled);
 		
 		itemremover172enabled = config.getBoolean("itemremover172.enabled",itemremover172enabled);
@@ -84,6 +88,8 @@ public class Config {
 		config.set("chatlimiter.maxmessagecount",chatlimitermaxmessagecount);
 		
 		config.set("doorrecoil.enabled",doorrecoilenabled);
+		
+		config.set("voidlistener.enabled",voidlistenerenabled);
 		
 		config.set("essentialstpa.enabled",essentialstpaenabled);
 		
