@@ -17,7 +17,6 @@
 
 package amrcci;
 
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -43,11 +42,8 @@ public class VoidListener implements Listener {
 			if (e.getEntity() instanceof Player)
 			{
 				Player player = (Player) e.getEntity();
-				if (player.getGameMode() != GameMode.SURVIVAL)
-				{
-					player.getInventory().clear();
-					player.getInventory().setArmorContents(null);
-				}
+				player.getInventory().clear();
+				player.getInventory().setArmorContents(null);
 			}
 		}
 	}
