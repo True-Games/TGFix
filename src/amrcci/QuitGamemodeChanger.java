@@ -35,7 +35,7 @@ public class QuitGamemodeChanger implements Listener {
 	public void onPlayerQuit(PlayerQuitEvent e)
 	{
 		if (!config.quitgamemodechangerenabled) {return;} 
-		if (e.getPlayer().hasPermission("amrcci.ignoregm")) {return;}
+		if (e.getPlayer().hasPermission("amrcci.gmchange")) {return;}
 			
 		e.getPlayer().setGameMode(GameMode.SURVIVAL);
 	}

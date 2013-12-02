@@ -23,6 +23,7 @@ import org.bukkit.entity.Horse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 public class NoCreativeHorseInteract implements Listener {
@@ -37,7 +38,8 @@ public class NoCreativeHorseInteract implements Listener {
 	public void onInteractEntity(PlayerInteractEntityEvent e)
 	{
 		if (!config.nocreativehorseinteractenabled) {return;}
-
+		if (e.getPlayer().hasPermission("amrcci.gminteract")) {return;}
+		
 		if (e.getPlayer().getGameMode() == GameMode.CREATIVE)
 		{
 			if (e.getRightClicked().getType() == EntityType.HORSE)
@@ -49,6 +51,28 @@ public class NoCreativeHorseInteract implements Listener {
 				}
 			}
 		}
+	}
+	
+	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
+	public void onOpenEntityChest(InventoryOpenEvent e)
+	{
+		if (!config.nocreativehorseinteractenabled) {return;}
+		if (e.getPlayer().hasPermission("amrcci.gminteract")) {return;}
+		
+		if (e.getPlayer().getGameMode() == GameMode.CREATIVE)
+		{
+			if (e.getPlayer().isInsideVehicle())
+			{
+				if (e.getPlayer().getVehicle() instanceof Horse)
+				{
+					Horse horse = (Horse) e.getPlayer().getVehicle();
+					if (horse.isCarryingChest())
+					{
+						e.setCancelled(true);
+					}
+				}
+			}
+		}		
 	}
 	
 
