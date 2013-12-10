@@ -28,7 +28,6 @@ public class Main extends JavaPlugin {
 	public Config config;
 	public NamesRestrict nr;
 	public NicknameLimiter nl;
-	public QuitGamemodeChanger ql;
 	public VoidListener vl;
 	public NoChainEntityExplosion nce;
 	public DoorRecoil dr;
@@ -49,8 +48,6 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(nr, this);
 		nl = new NicknameLimiter(config);
 		getServer().getPluginManager().registerEvents(nl, this);
-		ql = new QuitGamemodeChanger(config);
-		getServer().getPluginManager().registerEvents(ql, this);
 		nce = new NoChainEntityExplosion(config);
 		getServer().getPluginManager().registerEvents(nce, this);
 		vl = new VoidListener(config);
@@ -73,7 +70,6 @@ public class Main extends JavaPlugin {
 		nr.spllist();
 		nr = null;
 		vl = null;
-		ql = null;
 		nl = null;
 		nce = null;
 		dr = null;
