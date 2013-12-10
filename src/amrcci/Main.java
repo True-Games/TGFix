@@ -33,7 +33,6 @@ public class Main extends JavaPlugin {
 	public NoChainEntityExplosion nce;
 	public DoorRecoil dr;
 	public JoinSpawnTeleport st;
-	public NoCreativeHorseInteract ngi;
 	public EssentialsTPA etp;
 	public ItemRemover172 ir172;
 	public ChatLimiter cl;
@@ -60,8 +59,6 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(dr, this);
 		st = new JoinSpawnTeleport(this, config);
 		getServer().getPluginManager().registerEvents(st, this);
-		ngi = new NoCreativeHorseInteract(config);
-		getServer().getPluginManager().registerEvents(ngi, this);
 		etp = new EssentialsTPA(config);
 		getServer().getPluginManager().registerEvents(etp, this);
 		ir172 = new ItemRemover172(config);
