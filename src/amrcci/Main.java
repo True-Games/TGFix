@@ -28,12 +28,10 @@ public class Main extends JavaPlugin {
 	public Config config;
 	public NamesRestrict nr;
 	public NicknameLimiter nl;
-	public VoidListener vl;
 	public NoChainEntityExplosion nce;
 	public DoorRecoil dr;
 	public JoinSpawnTeleport st;
 	public EssentialsTPA etp;
-	public ItemRemover172 ir172;
 	public ChatLimiter cl;
         
 	@Override
@@ -50,16 +48,12 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(nl, this);
 		nce = new NoChainEntityExplosion(config);
 		getServer().getPluginManager().registerEvents(nce, this);
-		vl = new VoidListener(config);
-		getServer().getPluginManager().registerEvents(vl, this);
 		dr = new DoorRecoil(config);
 		getServer().getPluginManager().registerEvents(dr, this);
 		st = new JoinSpawnTeleport(this, config);
 		getServer().getPluginManager().registerEvents(st, this);
 		etp = new EssentialsTPA(config);
 		getServer().getPluginManager().registerEvents(etp, this);
-		ir172 = new ItemRemover172(config);
-		getServer().getPluginManager().registerEvents(ir172, this);
 		cl = new ChatLimiter(this, config);
 		getServer().getPluginManager().registerEvents(cl, this);
 	}
@@ -69,12 +63,10 @@ public class Main extends JavaPlugin {
 	{
 		nr.spllist();
 		nr = null;
-		vl = null;
 		nl = null;
 		nce = null;
 		dr = null;
 		st = null;
-		ir172 = null;
 		cl = null;
 		commands = null;
 		config = null;
