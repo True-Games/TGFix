@@ -27,7 +27,6 @@ public class Main extends JavaPlugin {
 	public Commands commands;
 	public Config config;
 	public NamesRestrict nr;
-	public NicknameLimiter nl;
 	public NoChainEntityExplosion nce;
 	public DoorRecoil dr;
 	public JoinSpawnTeleport st;
@@ -44,8 +43,6 @@ public class Main extends JavaPlugin {
 		nr = new NamesRestrict(this, config);
 		nr.lpllist();
 		getServer().getPluginManager().registerEvents(nr, this);
-		nl = new NicknameLimiter(config);
-		getServer().getPluginManager().registerEvents(nl, this);
 		nce = new NoChainEntityExplosion(config);
 		getServer().getPluginManager().registerEvents(nce, this);
 		dr = new DoorRecoil(config);
@@ -63,7 +60,6 @@ public class Main extends JavaPlugin {
 	{
 		nr.spllist();
 		nr = null;
-		nl = null;
 		nce = null;
 		dr = null;
 		st = null;
