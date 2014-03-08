@@ -43,8 +43,6 @@ public class Config {
 	
 	public boolean essentialstpaenabled = true;
 	
-	public boolean itemremover172enabled = true;
-	
 	public boolean joinspawnteleportenabled = true;
 	public HashSet<String> joinspawnteleportworlds = new HashSet<String>();
 	
@@ -57,6 +55,8 @@ public class Config {
 	public boolean nocreativehorseinteractenabled = true;
 	
 	public boolean quitgamemodechangerenabled = true;
+	
+	public boolean anvilinteractfixenabled = true;
 
 	public void loadConfig()
 	{
@@ -71,9 +71,7 @@ public class Config {
 		voidlistenerenabled = config.getBoolean("voidlistener.enabled",voidlistenerenabled);
 		
 		essentialstpaenabled = config.getBoolean("essentialstpa.enabled",essentialstpaenabled);
-		
-		itemremover172enabled = config.getBoolean("itemremover172.enabled",itemremover172enabled);
-		
+	
 		joinspawnteleportenabled = config.getBoolean("joinspawnteleport.enabled",joinspawnteleportenabled);
 		joinspawnteleportworlds = new HashSet<String>(config.getStringList("joinspawnteleport.worlds"));
 		
@@ -85,6 +83,8 @@ public class Config {
 		
 		quitgamemodechangerenabled = config.getBoolean("quitgamemodechanger.enabled",quitgamemodechangerenabled);
 		
+		anvilinteractfixenabled = config.getBoolean("anvilplacefix.enabled", anvilinteractfixenabled);
+		
 		config.set("chatlimiter.enabled",chatlimiterenabled);
 		config.set("chatlimiter.msecdiff",chatlimitermsecdiff);
 		config.set("chatlimiter.maxmessagecount",chatlimitermaxmessagecount);
@@ -94,9 +94,7 @@ public class Config {
 		config.set("voidlistener.enabled",voidlistenerenabled);
 		
 		config.set("essentialstpa.enabled",essentialstpaenabled);
-		
-		config.set("itemremover172.enabled",itemremover172enabled);
-		
+
 		config.set("joinspawnteleport.enabled",joinspawnteleportenabled);
 		config.set("joinspawnteleport.worlds", new ArrayList<String>(joinspawnteleportworlds));
 		
@@ -107,6 +105,8 @@ public class Config {
 		config.set("nocreativehorseinteract.enabled",nocreativehorseinteractenabled);
 		
 		config.set("quitgamemodechanger.enabled",quitgamemodechangerenabled);
+		
+		config.set("anvilplacefix.enabled", anvilinteractfixenabled);
 
 		try {config.save(configfile);} catch (IOException e) {}
 	}

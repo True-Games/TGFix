@@ -32,6 +32,7 @@ public class Main extends JavaPlugin {
 	public JoinSpawnTeleport st;
 	public EssentialsTPA etp;
 	public ChatLimiter cl;
+	public AnvilInteractFix aif;
         
 	@Override
 	public void onEnable()
@@ -53,6 +54,8 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(etp, this);
 		cl = new ChatLimiter(this, config);
 		getServer().getPluginManager().registerEvents(cl, this);
+		aif = new AnvilInteractFix(config);
+		getServer().getPluginManager().registerEvents(aif, this);
 	}
         
 	@Override
@@ -64,6 +67,7 @@ public class Main extends JavaPlugin {
 		dr = null;
 		st = null;
 		cl = null;
+		aif = null;
 		commands = null;
 		config = null;
 	}
