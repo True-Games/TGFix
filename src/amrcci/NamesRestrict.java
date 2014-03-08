@@ -19,12 +19,15 @@ package amrcci;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
@@ -82,13 +85,17 @@ public class NamesRestrict implements Listener {
 	}
 
 	
-	public void doPurge()
+	public void doPurge() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
 	{
 		Iterator<String> namesit = plnames.values().iterator();
 		while (namesit.hasNext())
 		{
 			String name = namesit.next();
-			OfflinePlayer offpl = Bukkit.getOfflinePlayer(name);
+			Server server = Bukkit.getServer();
+			Class<?> craftofflineplayer = Bukkit.getOfflinePlayer("fakeautopurgeplayer").getClass();
+			Constructor<?> ctor = craftofflineplayer.getDeclaredConstructor(server.getClass(), String.class);
+			ctor.setAccessible(true);
+			OfflinePlayer offpl = (OfflinePlayer) ctor.newInstance(server, name);
 			if (!offpl.isOnline() && !offpl.hasPlayedBefore())
 			{
 				namesit.remove();

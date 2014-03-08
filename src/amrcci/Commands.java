@@ -61,8 +61,12 @@ public class Commands implements CommandExecutor {
 			} else
 			if (args.length == 1 && args[0].equalsIgnoreCase("purgelist"))
 			{
-				main.nr.doPurge();
-				sender.sendMessage("Список игроков NamesRestrict очищен");
+				try {
+					main.nr.doPurge();
+					sender.sendMessage("Список игроков NamesRestrict очищен");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				return true;
 			} else
 			if (args.length == 2 && args[0].equalsIgnoreCase("changenameinlist"))
