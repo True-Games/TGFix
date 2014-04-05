@@ -24,43 +24,23 @@ import org.bukkit.plugin.java.JavaPlugin;
 //этот плагин служит сборищем фиксов для тех или иных вещей, чтобы не писать для этого отдельные плагины, я докидываю фиксы сюда.
 public class Main extends JavaPlugin {
 
-	public Commands commands;
 	public Config config;
-	public NamesRestrict nr;
-	public DoorRecoil dr;
-	public JoinSpawnTeleport st;
-	public EssentialsTPA etp;
-	public ChatLimiter cl;
-	public AnvilInteractFix aif;
 
 	@Override
 	public void onEnable() {
 		config = new Config(new File(this.getDataFolder(), "config.yml"));
 		config.loadConfig();
-		commands = new Commands(this);
-		getCommand("amrcci").setExecutor(commands);
-		nr = new NamesRestrict(this, config);
-		getServer().getPluginManager().registerEvents(nr, this);
-		dr = new DoorRecoil(config);
-		getServer().getPluginManager().registerEvents(dr, this);
-		st = new JoinSpawnTeleport(this, config);
-		getServer().getPluginManager().registerEvents(st, this);
-		etp = new EssentialsTPA(config);
-		getServer().getPluginManager().registerEvents(etp, this);
-		cl = new ChatLimiter(this, config);
-		getServer().getPluginManager().registerEvents(cl, this);
-		aif = new AnvilInteractFix(config);
-		getServer().getPluginManager().registerEvents(aif, this);
+		getCommand("amrcci").setExecutor(new Commands(this));
+		getServer().getPluginManager().registerEvents(new NamesRestrict(this, config), this);
+		getServer().getPluginManager().registerEvents(new DoorRecoil(config), this);
+		getServer().getPluginManager().registerEvents(new JoinSpawnTeleport(this, config), this);
+		getServer().getPluginManager().registerEvents(new EssentialsTPA(config), this);
+		getServer().getPluginManager().registerEvents(new ChatLimiter(this, config), this);
+		getServer().getPluginManager().registerEvents(new AnvilInteractFix(config), this);
 	}
 
 	@Override
 	public void onDisable() {
-		nr = null;
-		dr = null;
-		st = null;
-		cl = null;
-		aif = null;
-		commands = null;
 		config = null;
 	}
 

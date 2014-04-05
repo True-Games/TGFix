@@ -33,8 +33,7 @@ public class Commands implements CommandExecutor {
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command,
-			String arg2, String[] args) {
+	public boolean onCommand(CommandSender sender, Command command, String arg2, String[] args) {
 		if (this.isAllowed(sender, command.getName(), args)) {
 			if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
 				sender.sendMessage("/amrcci reload - перезагрузить конфиг");
