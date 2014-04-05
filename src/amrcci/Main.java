@@ -40,7 +40,6 @@ public class Main extends JavaPlugin {
 		commands = new Commands(this);
 		getCommand("amrcci").setExecutor(commands);
 		nr = new NamesRestrict(this, config);
-		nr.lpllist();
 		getServer().getPluginManager().registerEvents(nr, this);
 		dr = new DoorRecoil(config);
 		getServer().getPluginManager().registerEvents(dr, this);
@@ -56,7 +55,6 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		nr.spllist();
 		nr = null;
 		dr = null;
 		st = null;

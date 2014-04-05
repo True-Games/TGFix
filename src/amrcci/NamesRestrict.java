@@ -18,18 +18,8 @@
 package amrcci;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -39,31 +29,16 @@ import org.bukkit.event.player.PlayerLoginEvent.Result;
 public class NamesRestrict implements Listener {
 
 	private Config config;
-	private File playerlist;
 
 	public NamesRestrict(Main main, Config config) {
 		this.config = config;
-		this.playerlist = new File(main.getDataFolder(), "playerlist.yml");
-	}
-
-	protected void lpllist() {
-		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerlist);
-		plnames.clear();
-		for (String name : cfg.getStringList("players")) {
+		for (File playerfile : playersdir.listFiles()) {
+			String name = playerfile.getName();
 			plnames.put(name.toLowerCase(), name);
 		}
-		spllist();
 	}
-
-	protected void spllist() {
-		FileConfiguration cfg = new YamlConfiguration();
-		cfg.set("players", new ArrayList<String>(plnames.values()));
-		try {
-			cfg.save(playerlist);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	
+	File playersdir = new File(Bukkit.getWorlds().get(0).getWorldFolder(), "players");
 
 	protected HashMap<String, String> plnames = new HashMap<String, String>();
 
@@ -77,28 +52,15 @@ public class NamesRestrict implements Listener {
 		String lcname = joinname.toLowerCase();
 		if (!plnames.containsKey(lcname)) {
 			plnames.put(lcname, joinname);
-		} else {
-			String realname = plnames.get(lcname);
-			if (!joinname.equals(realname)) {
-				e.disallow(Result.KICK_OTHER,
-						"Залогиньтесь используя ваш оригинальный ник: "
-								+ realname);
-			}
+			return;
 		}
-	}
-
-	public void doPurge() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
-		Iterator<String> namesit = plnames.values().iterator();
-		while (namesit.hasNext()) {
-			String name = namesit.next();
-			Server server = Bukkit.getServer();
-			Class<?> craftofflineplayer = Bukkit.getOfflinePlayer("fakeautopurgeplayer").getClass();
-			Constructor<?> ctor = craftofflineplayer.getDeclaredConstructor(server.getClass(), String.class);
-			ctor.setAccessible(true);
-			OfflinePlayer offpl = (OfflinePlayer) ctor.newInstance(server, name);
-			if (!offpl.isOnline() && !offpl.hasPlayedBefore()) {
-				namesit.remove();
-			}
+		String realname = plnames.get(lcname);
+		if (!new File(playersdir, realname).exists()) {
+			plnames.put(lcname, joinname);
+			return;
+		}
+		if (!joinname.equals(realname)) {
+			e.disallow(Result.KICK_OTHER, "Залогиньтесь используя ваш оригинальный ник: " + realname);
 		}
 	}
 

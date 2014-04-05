@@ -2,7 +2,6 @@ name: AMRCCI
 main: amrcci.Main
 version: 1.0
 author: _Shevchik_
-load: STARTUP
 commands:
   amrcci:
     description: amrcci commands

@@ -37,38 +37,9 @@ public class Commands implements CommandExecutor {
 			String arg2, String[] args) {
 		if (this.isAllowed(sender, command.getName(), args)) {
 			if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
-				sender.sendMessage("/amrcci loadlist - загрузить список игроков NamesRestrict из файла");
-				sender.sendMessage("/amrcci savelist - сохранить список игроков NamesRestrict в файл");
-				sender.sendMessage("/amrcci purgelist - очистить список игроков NamesRestrict от не играющих игроков");
-				sender.sendMessage("/amrcci changenameinlist - сменить имя в списке NamesRestrict");
 				sender.sendMessage("/amrcci reload - перезагрузить конфиг");
 				return true;
-			}
-			if (args.length == 1 && args[0].equalsIgnoreCase("loadlist")) {
-				main.nr.lpllist();
-				sender.sendMessage("Список игроков NamesRestrict загружен из файла");
-				return true;
-			} else if (args.length == 1 && args[0].equalsIgnoreCase("savelist")) {
-				main.nr.spllist();
-				sender.sendMessage("Список игроков NamesRestrict сохранён в файл");
-				return true;
-			} else if (args.length == 1 && args[0].equalsIgnoreCase("purgelist")) {
-				try {
-					main.nr.doPurge();
-					sender.sendMessage("Список игроков NamesRestrict очищен");
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return true;
-			} else if (args.length == 2 && args[0].equalsIgnoreCase("changenameinlist")) {
-				if (main.nr.plnames.containsKey(args[1].toLowerCase())) {
-					main.nr.plnames.put(args[1].toLowerCase(), args[1]);
-					sender.sendMessage("Имя в списке NamesRestrict изменено");
-				} else {
-					sender.sendMessage("Данное имя не найдено в списке NamesRestrict");
-				}
-				return true;
-			} else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
+			} if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 				main.config.loadConfig();
 				sender.sendMessage("Конфиг перезагружен");
 				return true;
