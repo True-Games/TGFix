@@ -41,8 +41,8 @@ public class EssentialsTPA implements Listener {
 			return;
 		}
 
-		final String[] cmds = event.getMessage().split("\\s+");
-		if (cmds[0].equalsIgnoreCase("/tpaccept")) {
+		final String[] cmds = event.getMessage().toLowerCase().split("\\s+");
+		if (cmds[0].equalsIgnoreCase("/tpaccept") || cmds[0].equalsIgnoreCase("/essentials:tpaccept")) {
 			Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 			try {
 				User essuser = ess.getUser(event.getPlayer());
