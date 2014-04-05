@@ -30,32 +30,29 @@ import com.earth2me.essentials.User;
 public class EssentialsTPA implements Listener {
 
 	private Config config;
-	public EssentialsTPA(Config config)
-	{
+
+	public EssentialsTPA(Config config) {
 		this.config = config;
 	}
-	
-	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
-	public void onEssTPA(PlayerCommandPreprocessEvent event)
-	{
-		if (!config.essentialstpaenabled) {return;}
-		
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onEssTPA(PlayerCommandPreprocessEvent event) {
+		if (!config.essentialstpaenabled) {
+			return;
+		}
+
 		final String[] cmds = event.getMessage().split("\\s+");
-		if (cmds[0].equalsIgnoreCase("/tpaccept"))
-		{
+		if (cmds[0].equalsIgnoreCase("/tpaccept")) {
 			Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 			try {
 				User essuser = ess.getUser(event.getPlayer());
 				String srequester = essuser.getTeleportRequest();
-				if (srequester != null)
-				{
+				if (srequester != null) {
 					Player requester = Bukkit.getPlayerExact(srequester);
-					if (requester!= null)
-					{
+					if (requester != null) {
 						PlayerCommandPreprocessEvent fakeevent = new PlayerCommandPreprocessEvent(requester, "/faketpaccept");
 						Bukkit.getPluginManager().callEvent(fakeevent);
-						if (fakeevent.isCancelled())
-						{
+						if (fakeevent.isCancelled()) {
 							event.setCancelled(true);
 						}
 					}
@@ -63,9 +60,8 @@ public class EssentialsTPA implements Listener {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 		}
-		
+
 	}
-	
+
 }

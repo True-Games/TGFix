@@ -27,19 +27,16 @@ import org.bukkit.entity.Player;
 public class Commands implements CommandExecutor {
 
 	private Main main;
-	public Commands(Main main)
-	{
+
+	public Commands(Main main) {
 		this.main = main;
 	}
-	
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command, String arg2, String[] args) 
-	{
-		if (this.isAllowed(sender, command.getName(), args))
-		{
-			if (args.length == 1 && args[0].equalsIgnoreCase("help"))
-			{
+	public boolean onCommand(CommandSender sender, Command command,
+			String arg2, String[] args) {
+		if (this.isAllowed(sender, command.getName(), args)) {
+			if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
 				sender.sendMessage("/amrcci loadlist - загрузить список игроков NamesRestrict из файла");
 				sender.sendMessage("/amrcci savelist - сохранить список игроков NamesRestrict в файл");
 				sender.sendMessage("/amrcci purgelist - очистить список игроков NamesRestrict от не играющих игроков");
@@ -47,20 +44,15 @@ public class Commands implements CommandExecutor {
 				sender.sendMessage("/amrcci reload - перезагрузить конфиг");
 				return true;
 			}
-			if (args.length == 1 && args[0].equalsIgnoreCase("loadlist"))
-			{
+			if (args.length == 1 && args[0].equalsIgnoreCase("loadlist")) {
 				main.nr.lpllist();
 				sender.sendMessage("Список игроков NamesRestrict загружен из файла");
 				return true;
-			} else
-			if (args.length == 1 && args[0].equalsIgnoreCase("savelist"))
-			{
+			} else if (args.length == 1 && args[0].equalsIgnoreCase("savelist")) {
 				main.nr.spllist();
 				sender.sendMessage("Список игроков NamesRestrict сохранён в файл");
 				return true;
-			} else
-			if (args.length == 1 && args[0].equalsIgnoreCase("purgelist"))
-			{
+			} else if (args.length == 1 && args[0].equalsIgnoreCase("purgelist")) {
 				try {
 					main.nr.doPurge();
 					sender.sendMessage("Список игроков NamesRestrict очищен");
@@ -68,21 +60,15 @@ public class Commands implements CommandExecutor {
 					e.printStackTrace();
 				}
 				return true;
-			} else
-			if (args.length == 2 && args[0].equalsIgnoreCase("changenameinlist"))
-			{
-				if (main.nr.plnames.containsKey(args[1].toLowerCase()))
-				{
+			} else if (args.length == 2 && args[0].equalsIgnoreCase("changenameinlist")) {
+				if (main.nr.plnames.containsKey(args[1].toLowerCase())) {
 					main.nr.plnames.put(args[1].toLowerCase(), args[1]);
 					sender.sendMessage("Имя в списке NamesRestrict изменено");
-				} else
-				{
+				} else {
 					sender.sendMessage("Данное имя не найдено в списке NamesRestrict");
 				}
 				return true;
-			} else
-			if (args.length == 1 && args[0].equalsIgnoreCase("reload"))
-			{
+			} else if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 				main.config.loadConfig();
 				sender.sendMessage("Конфиг перезагружен");
 				return true;
@@ -91,22 +77,19 @@ public class Commands implements CommandExecutor {
 		return false;
 	}
 
-	
-	private boolean isAllowed(CommandSender sender,final String commandName, String[] args)
-	{
+	private boolean isAllowed(CommandSender sender, final String commandName, String[] args) {
 		boolean allowed = false;
-		
+
 		if ((sender instanceof Player)) {
 			Player player = (Player) sender;
 			if (player.isOp() || player.hasPermission("amrcci.reload")) {
 				allowed = true;
 			}
 		} else if (sender instanceof ConsoleCommandSender || sender instanceof RemoteConsoleCommandSender) {
-			// Success, this was from the Console or Remote Console
 			allowed = true;
 		}
-		
+
 		return allowed;
 	}
-	
+
 }

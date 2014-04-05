@@ -30,61 +30,49 @@ public class ChatLimiter implements Listener {
 
 	private Main main;
 	private Config config;
-	public ChatLimiter(Main main, Config config)
-	{
+
+	public ChatLimiter(Main main, Config config) {
 		this.main = main;
 		this.config = config;
 	}
-	
+
 	private ConcurrentHashMap<String, Long> playerspeaktime = new ConcurrentHashMap<String, Long>();
 	private ConcurrentHashMap<String, Integer> playerspeakcount = new ConcurrentHashMap<String, Integer>();
 
-	
-	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
-	public void onChat(AsyncPlayerChatEvent e)
-	{
-		if (!config.chatlimiterenabled) {return;}
-		
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onChat(AsyncPlayerChatEvent e) {
+		if (!config.chatlimiterenabled) {
+			return;
+		}
 		final String playername = e.getPlayer().getName();
-		if (playerspeaktime.containsKey(playername))
-		{
-			if (System.currentTimeMillis()-playerspeaktime.get(playername) < config.chatlimitermsecdiff)
-			{
-				e.getPlayer().sendMessage(ChatColor.RED+"Можно говорить только раз в "+config.chatlimitermsecdiff/1000+" секунд");
+		if (playerspeaktime.containsKey(playername)) {
+			if (System.currentTimeMillis() - playerspeaktime.get(playername) < config.chatlimitermsecdiff) {
+				e.getPlayer().sendMessage(ChatColor.RED + "Можно говорить только раз в " + config.chatlimitermsecdiff / 1000 + " секунд");
 				e.setCancelled(true);
 				return;
-			} else
-			{
+			} else {
 				playerspeaktime.remove(playername);
 			}
-		} else
-		{
+		} else {
 			playerspeaktime.put(playername, System.currentTimeMillis());
 		}
-		if (playerspeakcount.containsKey(playername))
-		{
-			if (playerspeakcount.get(playername) > config.chatlimitermaxmessagecount)
-			{
-				e.getPlayer().sendMessage(ChatColor.RED+"Вы исчерпали свой лимит сообщений на этот час");
+		if (playerspeakcount.containsKey(playername)) {
+			if (playerspeakcount.get(playername) > config.chatlimitermaxmessagecount) {
+				e.getPlayer().sendMessage(ChatColor.RED + "Вы исчерпали свой лимит сообщений на этот час");
 				e.setCancelled(true);
 				return;
-			} else
-			{
-				playerspeakcount.put(playername, playerspeakcount.get(playername)+1);
+			} else {
+				playerspeakcount.put(playername,
+						playerspeakcount.get(playername) + 1);
 			}
-		} else
-		{
+		} else {
 			playerspeakcount.put(playername, 1);
-			Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
-			{
-				public void run()
-				{
+			Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
+				public void run() {
 					playerspeakcount.remove(playername);
 				}
-			} ,20*60*60);
+			}, 20 * 60 * 60);
 		}
 	}
 
-	
-	
 }

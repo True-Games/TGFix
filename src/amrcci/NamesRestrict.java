@@ -40,64 +40,63 @@ public class NamesRestrict implements Listener {
 
 	private Config config;
 	private File playerlist;
-	public NamesRestrict(Main main, Config config)
-	{
+
+	public NamesRestrict(Main main, Config config) {
 		this.config = config;
-		this.playerlist = new File(main.getDataFolder(),"playerlist.yml");
+		this.playerlist = new File(main.getDataFolder(), "playerlist.yml");
 	}
-	
-	protected void lpllist()
-	{
+
+	protected void lpllist() {
 		FileConfiguration cfg = YamlConfiguration.loadConfiguration(playerlist);
 		plnames.clear();
-		for (String name : cfg.getStringList("players"))
-		{
+		for (String name : cfg.getStringList("players")) {
 			plnames.put(name.toLowerCase(), name);
 		}
 		spllist();
 	}
-	protected void spllist()
-	{
+
+	protected void spllist() {
 		FileConfiguration cfg = new YamlConfiguration();
 		cfg.set("players", new ArrayList<String>(plnames.values()));
-		try {cfg.save(playerlist);} catch (IOException e) {e.printStackTrace();}
+		try {
+			cfg.save(playerlist);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	protected HashMap<String, String> plnames = new HashMap<String, String>();
-	@EventHandler(priority=EventPriority.LOWEST)
-	public void onPlayerLogin(PlayerLoginEvent e)
-	{
-		if (!config.namesrestrictenabled) {return;}
-		
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onPlayerLogin(PlayerLoginEvent e) {
+		if (!config.namesrestrictenabled) {
+			return;
+		}
+
 		String joinname = e.getPlayer().getName();
 		String lcname = joinname.toLowerCase();
-		if (!plnames.containsKey(lcname))
-		{
+		if (!plnames.containsKey(lcname)) {
 			plnames.put(lcname, joinname);
-		} else
-		{
+		} else {
 			String realname = plnames.get(lcname);
-			if (!joinname.equals(realname))
-			{
-				e.disallow(Result.KICK_OTHER, "Залогиньтесь используя ваш оригинальный ник: "+realname);
+			if (!joinname.equals(realname)) {
+				e.disallow(Result.KICK_OTHER,
+						"Залогиньтесь используя ваш оригинальный ник: "
+								+ realname);
 			}
 		}
 	}
 
-	
-	public void doPurge() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
-	{
+	public void doPurge() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		Iterator<String> namesit = plnames.values().iterator();
-		while (namesit.hasNext())
-		{
+		while (namesit.hasNext()) {
 			String name = namesit.next();
 			Server server = Bukkit.getServer();
 			Class<?> craftofflineplayer = Bukkit.getOfflinePlayer("fakeautopurgeplayer").getClass();
 			Constructor<?> ctor = craftofflineplayer.getDeclaredConstructor(server.getClass(), String.class);
 			ctor.setAccessible(true);
 			OfflinePlayer offpl = (OfflinePlayer) ctor.newInstance(server, name);
-			if (!offpl.isOnline() && !offpl.hasPlayedBefore())
-			{
+			if (!offpl.isOnline() && !offpl.hasPlayedBefore()) {
 				namesit.remove();
 			}
 		}

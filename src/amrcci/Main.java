@@ -1,19 +1,19 @@
 /**
-* This program is free software; you can redistribute it and/or
-* modify it under the terms of the GNU General Public License
-* as published by the Free Software Foundation; either version 3
-* of the License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-*
-*/
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ */
 
 package amrcci;
 
@@ -27,25 +27,21 @@ public class Main extends JavaPlugin {
 	public Commands commands;
 	public Config config;
 	public NamesRestrict nr;
-	public NoChainEntityExplosion nce;
 	public DoorRecoil dr;
 	public JoinSpawnTeleport st;
 	public EssentialsTPA etp;
 	public ChatLimiter cl;
 	public AnvilInteractFix aif;
-        
+
 	@Override
-	public void onEnable()
-	{
-		config = new Config(new File(this.getDataFolder(),"config.yml"));
+	public void onEnable() {
+		config = new Config(new File(this.getDataFolder(), "config.yml"));
 		config.loadConfig();
 		commands = new Commands(this);
 		getCommand("amrcci").setExecutor(commands);
 		nr = new NamesRestrict(this, config);
 		nr.lpllist();
 		getServer().getPluginManager().registerEvents(nr, this);
-		nce = new NoChainEntityExplosion(config);
-		getServer().getPluginManager().registerEvents(nce, this);
 		dr = new DoorRecoil(config);
 		getServer().getPluginManager().registerEvents(dr, this);
 		st = new JoinSpawnTeleport(this, config);
@@ -57,13 +53,11 @@ public class Main extends JavaPlugin {
 		aif = new AnvilInteractFix(config);
 		getServer().getPluginManager().registerEvents(aif, this);
 	}
-        
+
 	@Override
-	public void onDisable()
-	{
+	public void onDisable() {
 		nr.spllist();
 		nr = null;
-		nce = null;
 		dr = null;
 		st = null;
 		cl = null;
@@ -71,5 +65,5 @@ public class Main extends JavaPlugin {
 		commands = null;
 		config = null;
 	}
-                
+
 }

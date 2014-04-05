@@ -32,53 +32,50 @@ public class JoinSpawnTeleport implements Listener {
 
 	private Main main;
 	private Config config;
-	public JoinSpawnTeleport(Main main, Config config)
-	{
+
+	public JoinSpawnTeleport(Main main, Config config) {
 		this.main = main;
 		this.config = config;
 	}
 
-	
-	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
-	public void onPlayerLoginAfterTeleport(AuthMeTeleportEvent e)
-	{
-		if (!config.joinspawnteleportenabled) {return;}
-		
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onPlayerLoginAfterTeleport(AuthMeTeleportEvent e) {
+		if (!config.joinspawnteleportenabled) {
+			return;
+		}
+
 		final Player player = e.getPlayer();
-		if (config.joinspawnteleportworlds.contains(e.getTo().getWorld().getName()) && !player.hasPermission("amrcci.ignoretp"))
-		{
+		if (config.joinspawnteleportworlds.contains(e.getTo().getWorld().getName()) && !player.hasPermission("amrcci.ignoretp")) {
 			final Location spawn = AuthMe.getInstance().essentialsSpawn;
-			if (spawn != null)
-			{
-				Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
-				{
-					public void run()
-					{
-						player.teleport(spawn);
-					}	
-				});
+			if (spawn != null) {
+				Bukkit.getScheduler().scheduleSyncDelayedTask(main,
+					new Runnable() {
+						public void run() {
+							player.teleport(spawn);
+						}
+					}
+				);
 			}
 		}
 	}
-	
-	@EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
-	public void onJoin(PlayerJoinEvent e)
-	{
-		if (!config.joinspawnteleportenabled) {return;}
-		
+
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onJoin(PlayerJoinEvent e) {
+		if (!config.joinspawnteleportenabled) {
+			return;
+		}
+
 		final Player player = e.getPlayer();
-		if (config.joinspawnteleportworlds.contains(player.getWorld().getName()) && !player.hasPermission("amrcci.ignoretp"))
-		{
+		if (config.joinspawnteleportworlds.contains(player.getWorld().getName()) && !player.hasPermission("amrcci.ignoretp")) {
 			final Location spawn = AuthMe.getInstance().essentialsSpawn;
-			if (spawn != null)
-			{
-				Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable()
-				{
-					public void run()
-					{
-						player.teleport(spawn);
-					}	
-				});
+			if (spawn != null) {
+				Bukkit.getScheduler().scheduleSyncDelayedTask(main,
+					new Runnable() {
+						public void run() {
+							player.teleport(spawn);
+						}
+					}
+				);
 			}
 		}
 	}
