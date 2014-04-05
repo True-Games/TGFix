@@ -1,5 +1,6 @@
 package amrcci;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -38,6 +39,7 @@ public class AnvilInteractFix implements Listener {
 		ApplicableRegionSet ars = WGBukkit.getRegionManager(block.getWorld()).getApplicableRegions(block.getLocation()); 
 		if (!ars.canBuild(WGBukkit.getPlugin().wrapPlayer(player))) {
 			event.setCancelled(true);
+			player.sendMessage(ChatColor.RED+"You don't have enough permissions to do this");
 		}
 	}
 
