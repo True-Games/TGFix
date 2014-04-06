@@ -34,7 +34,10 @@ public class NamesRestrict implements Listener {
 		this.config = config;
 		for (File playerfile : playersdir.listFiles()) {
 			String name = playerfile.getName();
-			plnames.put(name.toLowerCase(), name);
+			if (name.endsWith(".dat")) {
+				name = name.substring(0, name.length() - 4);
+				plnames.put(name.toLowerCase(), name);
+			}
 		}
 	}
 	
@@ -55,7 +58,7 @@ public class NamesRestrict implements Listener {
 			return;
 		}
 		String realname = plnames.get(lcname);
-		if (!new File(playersdir, realname).exists()) {
+		if (!new File(playersdir, realname+".dat").exists()) {
 			plnames.put(lcname, joinname);
 			return;
 		}
