@@ -39,24 +39,16 @@ public class Config {
 
 	public boolean doorrecoilenabled = true;
 
-	public boolean voidlistenerenabled = true;
-
 	public boolean essentialstpaenabled = true;
 
 	public boolean joinspawnteleportenabled = true;
 	public HashSet<String> joinspawnteleportworlds = new HashSet<String>();
 
-	public boolean namesrestrictenabled = true;
-
 	public boolean nicknamelimiterenabled = true;
 
-	public boolean nochainentityexplosionenabled = true;
-
-	public boolean nocreativehorseinteractenabled = true;
-
-	public boolean quitgamemodechangerenabled = true;
-
 	public boolean anvilinteractfixenabled = true;
+
+	public boolean vechiclecommandsrestrictenabled = true;
 
 	public void loadConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
@@ -67,22 +59,14 @@ public class Config {
 
 		doorrecoilenabled = config.getBoolean("doorrecoil.enabled",	doorrecoilenabled);
 
-		voidlistenerenabled = config.getBoolean("voidlistener.enabled", voidlistenerenabled);
-
 		essentialstpaenabled = config.getBoolean("essentialstpa.enabled", essentialstpaenabled);
 
 		joinspawnteleportenabled = config.getBoolean("joinspawnteleport.enabled", joinspawnteleportenabled);
 		joinspawnteleportworlds = new HashSet<String>(config.getStringList("joinspawnteleport.worlds"));
 
-		namesrestrictenabled = config.getBoolean("namesrestrict.enabled", namesrestrictenabled);
-
-		nochainentityexplosionenabled = config.getBoolean("nochainentityexplosion.enabled", nochainentityexplosionenabled);
-
-		nocreativehorseinteractenabled = config.getBoolean("nocreativehorseinteract.enabled", nocreativehorseinteractenabled);
-
-		quitgamemodechangerenabled = config.getBoolean("quitgamemodechanger.enabled", quitgamemodechangerenabled);
-
 		anvilinteractfixenabled = config.getBoolean("anvilplacefix.enabled", anvilinteractfixenabled);
+
+		vechiclecommandsrestrictenabled = config.getBoolean("vechiclecommandsrestrict.enabled", vechiclecommandsrestrictenabled);
 
 		config.set("chatlimiter.enabled", chatlimiterenabled);
 		config.set("chatlimiter.msecdiff", chatlimitermsecdiff);
@@ -90,22 +74,14 @@ public class Config {
 
 		config.set("doorrecoil.enabled", doorrecoilenabled);
 
-		config.set("voidlistener.enabled", voidlistenerenabled);
-
 		config.set("essentialstpa.enabled", essentialstpaenabled);
 
 		config.set("joinspawnteleport.enabled", joinspawnteleportenabled);
 		config.set("joinspawnteleport.worlds", new ArrayList<String>(joinspawnteleportworlds));
 
-		config.set("namesrestrict.enabled", namesrestrictenabled);
-
-		config.set("nochainentityexplosion.enabled", nochainentityexplosionenabled);
-
-		config.set("nocreativehorseinteract.enabled", nocreativehorseinteractenabled);
-
-		config.set("quitgamemodechanger.enabled", quitgamemodechangerenabled);
-
 		config.set("anvilplacefix.enabled", anvilinteractfixenabled);
+
+		config.set("vechiclecommandsrestrict.enabled", vechiclecommandsrestrictenabled);
 
 		try {
 			config.save(configfile);
