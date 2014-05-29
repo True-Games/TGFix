@@ -17,6 +17,9 @@
 
 package amrcci;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,6 +38,17 @@ public class EssentialsTPA implements Listener {
 		this.config = config;
 	}
 
+	private HashSet<String> esscmds = new HashSet<String>(
+		Arrays.asList(
+			new String[] {
+				"/tpaccept",
+				"/etpaccept",
+				"/essentials:tpaccept",
+				"/essentials:etpaccept"
+			}
+		)
+	);
+
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onEssTPA(PlayerCommandPreprocessEvent event) {
 		if (!config.essentialstpaenabled) {
@@ -42,7 +56,7 @@ public class EssentialsTPA implements Listener {
 		}
 
 		final String[] cmds = event.getMessage().toLowerCase().split("\\s+");
-		if (cmds[0].equalsIgnoreCase("/tpaccept") || cmds[0].equalsIgnoreCase("/essentials:tpaccept")) {
+		if (esscmds.contains(cmds[0].toLowerCase())) {
 			Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 			try {
 				User essuser = ess.getUser(event.getPlayer());
