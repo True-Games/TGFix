@@ -15,7 +15,7 @@
  * 
  */
 
-package amrcci;
+package tgfix;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

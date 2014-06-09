@@ -15,7 +15,7 @@
  * 
  */
 
-package amrcci;
+package tgfix;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
