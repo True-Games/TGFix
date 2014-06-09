@@ -22,6 +22,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -38,42 +39,8 @@ public class CommandLocaleFix implements Listener {
 	private Config config;
 
 	private HashSet<String> registeredCommands = new HashSet<String>();
-	private HashMap<Character, Character> charsMappings = new HashMap<Character, Character>();
 	public CommandLocaleFix(Main plugin, Config config) {
 		this.config = config;
-		charsMappings.put('й', 'q'); charsMappings.put('Й', 'Q');
-		charsMappings.put('ц', 'w'); charsMappings.put('Ц', 'W');
-		charsMappings.put('у', 'e'); charsMappings.put('У', 'E');
-		charsMappings.put('к', 'r'); charsMappings.put('К', 'R');
-		charsMappings.put('е', 't'); charsMappings.put('Е', 'T');
-		charsMappings.put('н', 'y'); charsMappings.put('Н', 'Y');
-		charsMappings.put('г', 'u'); charsMappings.put('Г', 'U');
-		charsMappings.put('ш', 'i'); charsMappings.put('Ш', 'I');
-		charsMappings.put('щ', 'o'); charsMappings.put('Щ', 'O');
-		charsMappings.put('з', 'p'); charsMappings.put('З', 'P');
-		charsMappings.put('х', '['); charsMappings.put('Х', '{');
-		charsMappings.put('ъ', ']'); charsMappings.put('Ъ', '}');
-		charsMappings.put('ф', 'a'); charsMappings.put('Ф', 'A');
-		charsMappings.put('ы', 's'); charsMappings.put('Ы', 'S');
-		charsMappings.put('в', 'd'); charsMappings.put('В', 'D');
-		charsMappings.put('а', 'f'); charsMappings.put('А', 'F');
-		charsMappings.put('п', 'g'); charsMappings.put('П', 'G');
-		charsMappings.put('р', 'h'); charsMappings.put('Р', 'H');
-		charsMappings.put('о', 'j'); charsMappings.put('О', 'J');
-		charsMappings.put('л', 'k'); charsMappings.put('Л', 'K');
-		charsMappings.put('д', 'l'); charsMappings.put('Д', 'L');
-		charsMappings.put('ж', ';'); charsMappings.put('Ж', ':');
-		charsMappings.put('э', '\''); charsMappings.put('Э', '"');
-		charsMappings.put('я', 'z'); charsMappings.put('Я', 'Z');
-		charsMappings.put('ч', 'x'); charsMappings.put('Ч', 'X');
-		charsMappings.put('с', 'c'); charsMappings.put('С', 'C');
-		charsMappings.put('м', 'v'); charsMappings.put('М', 'V');
-		charsMappings.put('и', 'b'); charsMappings.put('И', 'B');
-		charsMappings.put('т', 'n'); charsMappings.put('Т', 'N');
-		charsMappings.put('ь', 'm'); charsMappings.put('Ь', 'M');
-		charsMappings.put('б', ','); charsMappings.put('Б', '<');
-		charsMappings.put('ю', '.'); charsMappings.put('Ю', '>');
-		charsMappings.put('.', '/'); charsMappings.put(',', '?');
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, 
 			new Runnable() {
 				@Override
@@ -105,6 +72,8 @@ public class CommandLocaleFix implements Listener {
 		);
 	}
 
+	private LocaleInverter inverter = new LocaleInverter();
+
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		if (!config.commandlocalefixenabled) {
@@ -113,7 +82,7 @@ public class CommandLocaleFix implements Listener {
 
 		final String[] cmds = event.getMessage().toLowerCase().substring(1).split("\\s+");
 		if (!registeredCommands.contains(cmds[0])) {
-			event.setMessage(remapToEnglish(event.getMessage()));
+			event.setMessage(inverter.invertLocale(event.getMessage()));
 		}
 	}
 
@@ -126,23 +95,69 @@ public class CommandLocaleFix implements Listener {
 		String message = event.getMessage();
 		if (message.startsWith(".")) {
 			final String[] cmds = message.toLowerCase().substring(1).split("\\s+");
-			if (registeredCommands.contains(remapToEnglish(cmds[0]))) {
+			if (registeredCommands.contains(inverter.invertLocale(cmds[0]))) {
 				event.setCancelled(true);
-				event.getPlayer().chat("/" + remapToEnglish(message.substring(1)));
+				event.getPlayer().chat("/" + inverter.invertLocale(message.substring(1)));
 			}
 		}
 	}
 
-	private String remapToEnglish(String cmd) {
-		StringBuilder sb = new StringBuilder(255);
-		for (char c : cmd.toCharArray()) {
-			if (charsMappings.containsKey(c)) {
-				sb.append(charsMappings.get(c));
-			} else {
-				sb.append(c);
+	private static class LocaleInverter {
+		private HashMap<Character, Character> r2e = new HashMap<Character, Character>();
+		private HashMap<Character, Character> e2r = new HashMap<Character, Character>();
+		public LocaleInverter() {
+			r2e.put('й', 'q'); r2e.put('Й', 'Q');
+			r2e.put('ц', 'w'); r2e.put('Ц', 'W');
+			r2e.put('у', 'e'); r2e.put('У', 'E');
+			r2e.put('к', 'r'); r2e.put('К', 'R');
+			r2e.put('е', 't'); r2e.put('Е', 'T');
+			r2e.put('н', 'y'); r2e.put('Н', 'Y');
+			r2e.put('г', 'u'); r2e.put('Г', 'U');
+			r2e.put('ш', 'i'); r2e.put('Ш', 'I');
+			r2e.put('щ', 'o'); r2e.put('Щ', 'O');
+			r2e.put('з', 'p'); r2e.put('З', 'P');
+			r2e.put('х', '['); r2e.put('Х', '{');
+			r2e.put('ъ', ']'); r2e.put('Ъ', '}');
+			r2e.put('ф', 'a'); r2e.put('Ф', 'A');
+			r2e.put('ы', 's'); r2e.put('Ы', 'S');
+			r2e.put('в', 'd'); r2e.put('В', 'D');
+			r2e.put('а', 'f'); r2e.put('А', 'F');
+			r2e.put('п', 'g'); r2e.put('П', 'G');
+			r2e.put('р', 'h'); r2e.put('Р', 'H');
+			r2e.put('о', 'j'); r2e.put('О', 'J');
+			r2e.put('л', 'k'); r2e.put('Л', 'K');
+			r2e.put('д', 'l'); r2e.put('Д', 'L');
+			r2e.put('ж', ';'); r2e.put('Ж', ':');
+			r2e.put('э', '\''); r2e.put('Э', '"');
+			r2e.put('я', 'z'); r2e.put('Я', 'Z');
+			r2e.put('ч', 'x'); r2e.put('Ч', 'X');
+			r2e.put('с', 'c'); r2e.put('С', 'C');
+			r2e.put('м', 'v'); r2e.put('М', 'V');
+			r2e.put('и', 'b'); r2e.put('И', 'B');
+			r2e.put('т', 'n'); r2e.put('Т', 'N');
+			r2e.put('ь', 'm'); r2e.put('Ь', 'M');
+			r2e.put('б', ','); r2e.put('Б', '<');
+			r2e.put('ю', '.'); r2e.put('Ю', '>');
+			r2e.put('.', '/'); r2e.put(',', '?');
+			for (Entry<Character, Character> entry : r2e.entrySet()) {
+				e2r.put(entry.getValue(), entry.getKey());
 			}
 		}
-		return sb.toString();
+
+		public String invertLocale(String string) {
+			StringBuilder sb = new StringBuilder(255);
+			for (char c : string.toCharArray()) {
+				if (r2e.containsKey(c)) {
+					sb.append(r2e.get(c));
+				} else if (e2r.containsKey(c)) {
+					sb.append(e2r.get(c));
+				} else {
+					sb.append(c);
+				}
+			}
+			return sb.toString();
+		}
+
 	}
 
 }
