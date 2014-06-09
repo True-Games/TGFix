@@ -19,6 +19,7 @@ package amrcci;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -60,9 +61,9 @@ public class EssentialsTPA implements Listener {
 			Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 			try {
 				User essuser = ess.getUser(event.getPlayer());
-				String srequester = essuser.getTeleportRequest();
+				UUID srequester = essuser.getTeleportRequest();
 				if (srequester != null) {
-					Player requester = Bukkit.getPlayerExact(srequester);
+					Player requester = Bukkit.getPlayer(srequester);
 					if (requester != null) {
 						PlayerCommandPreprocessEvent fakeevent = new PlayerCommandPreprocessEvent(requester, "/faketpaccept");
 						Bukkit.getPluginManager().callEvent(fakeevent);
