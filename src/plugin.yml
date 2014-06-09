@@ -1,6 +1,6 @@
 name: TGFix
 main: tgfix.Main
-version: 1.0
+version: 2.0
 author: _Shevchik_
 commands:
   amrcci:
