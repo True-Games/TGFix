@@ -68,7 +68,7 @@ public class Config {
 
 		vechiclecommandsrestrictenabled = config.getBoolean("vechiclecommandsrestrict.enabled", vechiclecommandsrestrictenabled);
 
-		commandlocalefixenabled = config.getBoolean("commandlocalefixenabled", commandlocalefixenabled);
+		commandlocalefixenabled = config.getBoolean("commandlocalefix.enabled", commandlocalefixenabled);
 
 		config.set("chatlimiter.enabled", chatlimiterenabled);
 		config.set("chatlimiter.msecdiff", chatlimitermsecdiff);
@@ -85,7 +85,7 @@ public class Config {
 
 		config.set("vechiclecommandsrestrict.enabled", vechiclecommandsrestrictenabled);
 
-		config.set("commandlocalefixenabled", commandlocalefixenabled);
+		config.set("commandlocalefix.enabled", commandlocalefixenabled);
 
 		try {
 			config.save(configfile);
