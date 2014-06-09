@@ -30,7 +30,7 @@ public class Main extends JavaPlugin {
 	public void onEnable() {
 		config = new Config(new File(this.getDataFolder(), "config.yml"));
 		config.loadConfig();
-		getCommand("amrcci").setExecutor(new Commands(this));
+		getCommand("tgfix").setExecutor(new Commands(this));
 		getServer().getPluginManager().registerEvents(new DoorRecoil(config), this);
 		getServer().getPluginManager().registerEvents(new JoinSpawnTeleport(this, config), this);
 		getServer().getPluginManager().registerEvents(new EssentialsTPA(config), this);

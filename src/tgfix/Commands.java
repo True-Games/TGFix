@@ -36,7 +36,7 @@ public class Commands implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String arg2, String[] args) {
 		if (this.isAllowed(sender, command.getName(), args)) {
 			if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
-				sender.sendMessage("/amrcci reload - перезагрузить конфиг");
+				sender.sendMessage("/tgfix reload - перезагрузить конфиг");
 				return true;
 			} if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
 				main.config.loadConfig();
@@ -48,18 +48,16 @@ public class Commands implements CommandExecutor {
 	}
 
 	private boolean isAllowed(CommandSender sender, final String commandName, String[] args) {
-		boolean allowed = false;
-
 		if ((sender instanceof Player)) {
 			Player player = (Player) sender;
-			if (player.isOp() || player.hasPermission("amrcci.reload")) {
-				allowed = true;
+			if (player.hasPermission("amrcci.reload")) {
+				return true;
 			}
 		} else if (sender instanceof ConsoleCommandSender || sender instanceof RemoteConsoleCommandSender) {
-			allowed = true;
+			return true;
 		}
 
-		return allowed;
+		return false;
 	}
 
 }
