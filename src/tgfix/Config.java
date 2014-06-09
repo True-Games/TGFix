@@ -44,8 +44,6 @@ public class Config {
 	public boolean joinspawnteleportenabled = true;
 	public HashSet<String> joinspawnteleportworlds = new HashSet<String>();
 
-	public boolean nicknamelimiterenabled = true;
-
 	public boolean anvilinteractfixenabled = true;
 
 	public boolean vechiclecommandsrestrictenabled = true;
