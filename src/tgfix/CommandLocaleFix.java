@@ -35,9 +35,12 @@ import org.bukkit.plugin.PluginManager;
 
 public class CommandLocaleFix implements Listener {
 
+	private Config config;
+
 	private HashSet<String> registeredCommands = new HashSet<String>();
 	private HashMap<Character, Character> charsMappings = new HashMap<Character, Character>();
-	public CommandLocaleFix(Main plugin) {
+	public CommandLocaleFix(Main plugin, Config config) {
+		this.config = config;
 		charsMappings.put('й', 'q'); charsMappings.put('Й', 'Q');
 		charsMappings.put('ц', 'w'); charsMappings.put('Ц', 'W');
 		charsMappings.put('у', 'e'); charsMappings.put('У', 'E');
@@ -104,6 +107,10 @@ public class CommandLocaleFix implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
+		if (!config.commandlocalefixenabled) {
+			return;
+		}
+
 		final String[] cmds = event.getMessage().toLowerCase().substring(1).split("\\s+");
 		if (registeredCommands.contains(remapToEnglish(cmds[0]))) {
 			event.setMessage(remapToEnglish(event.getMessage()));
@@ -112,6 +119,10 @@ public class CommandLocaleFix implements Listener {
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onAsyncChat(AsyncPlayerChatEvent event) {
+		if (!config.commandlocalefixenabled) {
+			return;
+		}
+
 		String message = event.getMessage();
 		if (message.startsWith(".")) {
 			final String[] cmds = message.toLowerCase().substring(1).split("\\s+");

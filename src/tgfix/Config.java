@@ -50,6 +50,8 @@ public class Config {
 
 	public boolean vechiclecommandsrestrictenabled = true;
 
+	public boolean commandlocalefixenabled = true;
+
 	public void loadConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
 
@@ -68,6 +70,8 @@ public class Config {
 
 		vechiclecommandsrestrictenabled = config.getBoolean("vechiclecommandsrestrict.enabled", vechiclecommandsrestrictenabled);
 
+		commandlocalefixenabled = config.getBoolean("commandlocalefixenabled", commandlocalefixenabled);
+
 		config.set("chatlimiter.enabled", chatlimiterenabled);
 		config.set("chatlimiter.msecdiff", chatlimitermsecdiff);
 		config.set("chatlimiter.maxmessagecount", chatlimitermaxmessagecount);
@@ -82,6 +86,8 @@ public class Config {
 		config.set("anvilplacefix.enabled", anvilinteractfixenabled);
 
 		config.set("vechiclecommandsrestrict.enabled", vechiclecommandsrestrictenabled);
+
+		config.set("commandlocalefixenabled", commandlocalefixenabled);
 
 		try {
 			config.save(configfile);
