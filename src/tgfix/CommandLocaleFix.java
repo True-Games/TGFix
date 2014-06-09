@@ -112,7 +112,7 @@ public class CommandLocaleFix implements Listener {
 		}
 
 		final String[] cmds = event.getMessage().toLowerCase().substring(1).split("\\s+");
-		if (registeredCommands.contains(remapToEnglish(cmds[0]))) {
+		if (!registeredCommands.contains(cmds[0]) && registeredCommands.contains(remapToEnglish(cmds[0]))) {
 			event.setMessage(remapToEnglish(event.getMessage()));
 		}
 	}
@@ -126,7 +126,7 @@ public class CommandLocaleFix implements Listener {
 		String message = event.getMessage();
 		if (message.startsWith(".")) {
 			final String[] cmds = message.toLowerCase().substring(1).split("\\s+");
-			if (registeredCommands.contains(remapToEnglish(cmds[0]))) {
+			if (!registeredCommands.contains(cmds[0]) && registeredCommands.contains(remapToEnglish(cmds[0]))) {
 				event.setCancelled(true);
 				event.getPlayer().chat("/" + remapToEnglish(message.substring(1)));
 			}
