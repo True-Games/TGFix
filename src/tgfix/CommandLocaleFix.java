@@ -27,6 +27,7 @@ import java.util.Map.Entry;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -89,7 +90,7 @@ public class CommandLocaleFix implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onAsyncChat(final AsyncPlayerChatEvent event) {
+	public void onAsyncChat(AsyncPlayerChatEvent event) {
 		if (!config.commandlocalefixenabled) {
 			return;
 		}
@@ -99,12 +100,15 @@ public class CommandLocaleFix implements Listener {
 			final String[] cmds = message.toLowerCase().substring(1).split("\\s+");
 			if (registeredCommands.contains(inverter.invertLocale(cmds[0]))) {
 				event.setCancelled(true);
+				final Player player = event.getPlayer();
 				Bukkit.getScheduler().scheduleSyncDelayedTask(
 					plugin,
 					new Runnable() {
 						@Override
 						public void run() {
-							event.getPlayer().chat("/" + inverter.invertLocale(message.substring(1)));
+							if (player.isOnline()) {
+								player.chat("/" + inverter.invertLocale(message.substring(1)));
+							}
 						}
 					}
 				);
