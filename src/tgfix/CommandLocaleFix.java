@@ -36,10 +36,12 @@ import org.bukkit.plugin.PluginManager;
 
 public class CommandLocaleFix implements Listener {
 
+	private Main plugin;
 	private Config config;
 
 	private HashSet<String> registeredCommands = new HashSet<String>();
 	public CommandLocaleFix(Main plugin, Config config) {
+		this.plugin = plugin;
 		this.config = config;
 		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin,
 			new Runnable() {
@@ -87,17 +89,25 @@ public class CommandLocaleFix implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
-	public void onAsyncChat(AsyncPlayerChatEvent event) {
+	public void onAsyncChat(final AsyncPlayerChatEvent event) {
 		if (!config.commandlocalefixenabled) {
 			return;
 		}
 
-		String message = event.getMessage();
+		final String message = event.getMessage();
 		if (message.startsWith(".")) {
 			final String[] cmds = message.toLowerCase().substring(1).split("\\s+");
 			if (registeredCommands.contains(inverter.invertLocale(cmds[0]))) {
 				event.setCancelled(true);
-				event.getPlayer().chat("/" + inverter.invertLocale(message.substring(1)));
+				Bukkit.getScheduler().scheduleSyncDelayedTask(
+					plugin,
+					new Runnable() {
+						@Override
+						public void run() {
+							event.getPlayer().chat("/" + inverter.invertLocale(message.substring(1)));
+						}
+					}
+				);
 			}
 		}
 	}
