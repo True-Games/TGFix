@@ -50,6 +50,8 @@ public class Config {
 
 	public boolean commandlocalefixenabled = true;
 
+	public boolean negativepayfixenabled = true;;
+
 	public void loadConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
 
@@ -70,6 +72,8 @@ public class Config {
 
 		commandlocalefixenabled = config.getBoolean("commandlocalefix.enabled", commandlocalefixenabled);
 
+		negativepayfixenabled = config.getBoolean("negativepayfix.enabled", negativepayfixenabled);
+
 		config.set("chatlimiter.enabled", chatlimiterenabled);
 		config.set("chatlimiter.msecdiff", chatlimitermsecdiff);
 		config.set("chatlimiter.maxmessagecount", chatlimitermaxmessagecount);
@@ -86,6 +90,8 @@ public class Config {
 		config.set("vechiclecommandsrestrict.enabled", vechiclecommandsrestrictenabled);
 
 		config.set("commandlocalefix.enabled", commandlocalefixenabled);
+
+		config.set("negativepayfix.enabled", negativepayfixenabled);
 
 		try {
 			config.save(configfile);

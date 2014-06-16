@@ -21,7 +21,7 @@ import java.io.File;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-//этот плагин служит сборищем фиксов для тех или иных вещей, чтобы не писать для этого отдельные плагины, я докидываю фиксы сюда.
+//some fixes for my servers
 public class Main extends JavaPlugin {
 
 	public Config config;
@@ -38,6 +38,7 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new AnvilInteractFix(config), this);
 		getServer().getPluginManager().registerEvents(new VehicleCommandsRestrict(config), this);
 		getServer().getPluginManager().registerEvents(new CommandLocaleFix(this, config), this);
+		getServer().getPluginManager().registerEvents(new NegativePayFix(config), this);
 	}
 
 	@Override
