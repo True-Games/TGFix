@@ -50,7 +50,9 @@ public class Config {
 
 	public boolean commandlocalefixenabled = true;
 
-	public boolean negativepayfixenabled = true;;
+	public boolean negativepayfixenabled = true;
+
+	public boolean customwandenabled = true;
 
 	public void loadConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
@@ -74,6 +76,8 @@ public class Config {
 
 		negativepayfixenabled = config.getBoolean("negativepayfix.enabled", negativepayfixenabled);
 
+		customwandenabled = config.getBoolean("customwewand.enabled", customwandenabled);
+
 		config.set("chatlimiter.enabled", chatlimiterenabled);
 		config.set("chatlimiter.msecdiff", chatlimitermsecdiff);
 		config.set("chatlimiter.maxmessagecount", chatlimitermaxmessagecount);
@@ -92,6 +96,8 @@ public class Config {
 		config.set("commandlocalefix.enabled", commandlocalefixenabled);
 
 		config.set("negativepayfix.enabled", negativepayfixenabled);
+
+		config.set("customwewand.enabled", customwandenabled);
 
 		try {
 			config.save(configfile);

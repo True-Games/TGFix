@@ -21,7 +21,7 @@ import java.io.File;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-//some fixes for my servers
+//some fixes and functions for my servers
 public class Main extends JavaPlugin {
 
 	public Config config;
@@ -39,6 +39,7 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new VehicleCommandsRestrict(config), this);
 		getServer().getPluginManager().registerEvents(new CommandLocaleFix(this, config), this);
 		getServer().getPluginManager().registerEvents(new NegativePayFix(config), this);
+		getServer().getPluginManager().registerEvents(new WorldEditWand(config), this);
 	}
 
 	@Override
