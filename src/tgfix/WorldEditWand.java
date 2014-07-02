@@ -36,13 +36,14 @@ public class WorldEditWand implements Listener {
 	}
 
 	private String wandcommand = "//wand";
+	private Material wandmaterial = Material.WOOD_AXE;
 	private String wandname = ChatColor.LIGHT_PURPLE + "Selection wand";
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onCommand(PlayerCommandPreprocessEvent event) {
 		if (event.getMessage().trim().equalsIgnoreCase(wandcommand)) {
-			ItemStack wand = new ItemStack(Material.WOOD_AXE);
-			ItemMeta im = Bukkit.getItemFactory().getItemMeta(Material.WOOD_AXE);
+			ItemStack wand = new ItemStack(wandmaterial);
+			ItemMeta im = Bukkit.getItemFactory().getItemMeta(wandmaterial);
 			im.setDisplayName(wandname);
 			wand.setItemMeta(im);
 			event.getPlayer().getInventory().addItem(wand);
@@ -59,7 +60,7 @@ public class WorldEditWand implements Listener {
 
 		Player player = event.getPlayer();
 		ItemStack item = player.getItemInHand();
-		if (item.hasItemMeta() && wandname.equalsIgnoreCase(item.getItemMeta().getDisplayName())) {
+		if (item.getType() == wandmaterial && item.hasItemMeta() && wandname.equalsIgnoreCase(item.getItemMeta().getDisplayName())) {
 			event.setCancelled(true);
 			Block block = event.getBlock();
 			if (block != null) {
@@ -83,7 +84,7 @@ public class WorldEditWand implements Listener {
 
 		Player player = event.getPlayer();
 		ItemStack item = player.getItemInHand();
-		if (item.hasItemMeta() && wandname.equalsIgnoreCase(item.getItemMeta().getDisplayName())) {
+		if (item.getType() == wandmaterial && item.hasItemMeta() && wandname.equalsIgnoreCase(item.getItemMeta().getDisplayName())) {
 			event.setCancelled(true);
 			Block block = event.getClickedBlock();
 			if (block != null) {
@@ -108,7 +109,7 @@ public class WorldEditWand implements Listener {
 		Entity edamager = event.getDamager();
 		if (edamager instanceof Player) {
 			ItemStack item = ((Player) edamager).getItemInHand();
-			if (item.hasItemMeta() && wandname.equalsIgnoreCase(item.getItemMeta().getDisplayName())) {
+			if (item.getType() == wandmaterial && item.hasItemMeta() && wandname.equalsIgnoreCase(item.getItemMeta().getDisplayName())) {
 				event.setCancelled(true);
 			}
 		}
@@ -123,7 +124,7 @@ public class WorldEditWand implements Listener {
 		Iterator<ItemStack> dropsit = event.getDrops().iterator();
 		while (dropsit.hasNext()) {
 			ItemStack item = dropsit.next();
-			if (item.hasItemMeta() && wandname.equalsIgnoreCase(item.getItemMeta().getDisplayName())) {
+			if (item.getType() == wandmaterial && item.hasItemMeta() && wandname.equalsIgnoreCase(item.getItemMeta().getDisplayName())) {
 				dropsit.remove();
 			}
 		}
