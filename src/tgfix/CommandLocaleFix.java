@@ -84,7 +84,7 @@ public class CommandLocaleFix implements Listener {
 		}
 
 		final String[] cmds = event.getMessage().toLowerCase().substring(1).split("\\s+");
-		if (!registeredCommands.contains(cmds[0])) {
+		if (!registeredCommands.contains(cmds[0]) && registeredCommands.contains(inverter.invertLocale(cmds[0]))) {
 			event.setMessage("/"+inverter.invertLocale(event.getMessage().substring(1)));
 		}
 	}
