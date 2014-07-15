@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -48,7 +49,31 @@ public class WorldEditWand implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-	public void onPos1(BlockDamageEvent event) {
+	public void onPos1ByBreak(BlockBreakEvent event) {
+		if (!config.customwandenabled) {
+			return;
+		}
+
+		org.bukkit.entity.Player player = event.getPlayer();
+		org.bukkit.inventory.ItemStack item = player.getItemInHand();
+		if (item.getType() == wandmaterial && item.hasItemMeta() && wandname.equalsIgnoreCase(item.getItemMeta().getDisplayName())) {
+			event.setCancelled(true);
+			org.bukkit.block.Block block = event.getBlock();
+			if (block != null) {
+				Player bplayer = we.wrapPlayer(player);
+				LocalSession session = we.getSession(player);
+				Vector vector = new Vector(block.getX(), block.getY(), block.getZ());
+		        if (!session.getRegionSelector(bplayer.getWorld()).selectPrimary(vector)) {
+		            bplayer.printError("Position already set.");
+		            return;
+		        }
+				session.getRegionSelector(bplayer.getWorld()).explainPrimarySelection(bplayer, session, vector);
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onPos1ByDamage(BlockDamageEvent event) {
 		if (!config.customwandenabled) {
 			return;
 		}
