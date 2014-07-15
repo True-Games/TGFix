@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -73,6 +74,10 @@ public class WorldEditWand implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onPos2(PlayerInteractEvent event) {
 		if (!config.customwandenabled) {
+			return;
+		}
+
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
 
