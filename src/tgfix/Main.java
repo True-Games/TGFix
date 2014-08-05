@@ -40,6 +40,7 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new CommandLocaleFix(this, config), this);
 		getServer().getPluginManager().registerEvents(new NegativePayFix(config), this);
 		getServer().getPluginManager().registerEvents(new WorldEditWand(config), this);
+		getServer().getPluginManager().registerEvents(new Fix127(config), this);
 	}
 
 	@Override

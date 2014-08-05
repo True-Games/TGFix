@@ -54,6 +54,9 @@ public class Config {
 
 	public boolean customwandenabled = true;
 
+	public boolean fix127enabled = true;
+	public int fix127maxlevel = 10;
+
 	public void loadConfig() {
 		FileConfiguration config = YamlConfiguration.loadConfiguration(configfile);
 
@@ -78,6 +81,10 @@ public class Config {
 
 		customwandenabled = config.getBoolean("customwewand.enabled", customwandenabled);
 
+		fix127enabled = config.getBoolean("fix127.enabled", fix127enabled);
+
+		fix127maxlevel = config.getInt("fix127.maxlevel", fix127maxlevel);
+
 		config.set("chatlimiter.enabled", chatlimiterenabled);
 		config.set("chatlimiter.msecdiff", chatlimitermsecdiff);
 		config.set("chatlimiter.maxmessagecount", chatlimitermaxmessagecount);
@@ -98,6 +105,10 @@ public class Config {
 		config.set("negativepayfix.enabled", negativepayfixenabled);
 
 		config.set("customwewand.enabled", customwandenabled);
+
+		config.set("fix127.enabled", fix127enabled);
+
+		config.set("fix127.maxlevel", fix127maxlevel);
 
 		try {
 			config.save(configfile);
