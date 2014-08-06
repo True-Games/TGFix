@@ -17,8 +17,6 @@
 
 package tgfix;
 
-import org.bukkit.BanList.Type;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -61,7 +59,6 @@ public class Fix127 implements Listener {
 		for (int level : item.getEnchantments().values()) {
 			if (level > config.fix127maxlevel) {
 				item.setType(Material.STONE);
-				Bukkit.getBanList(Type.NAME).addBan(humanEntity.getName(), "127", null, "TGFix");
 				return;
 			}
 		}
