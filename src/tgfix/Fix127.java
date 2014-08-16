@@ -17,8 +17,11 @@
 
 package tgfix;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.bukkit.Material;
-import org.bukkit.entity.HumanEntity;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -38,7 +41,9 @@ public class Fix127 implements Listener {
 		if (!config.fix127enabled) {
 			return;
 		}
-		checkItemStack(event.getWhoClicked(), event.getCurrentItem());
+		if (!isItemStackValid(event.getCurrentItem())) {
+			event.setCurrentItem(new ItemStack(Material.STONE));
+		}
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -48,20 +53,30 @@ public class Fix127 implements Listener {
 		}
 		if (event.getDamager() instanceof Player) {
 			Player player = (Player) event.getDamager();
-			checkItemStack(player, player.getItemInHand());
+			if (!isItemStackValid(player.getItemInHand())) {
+				player.setItemInHand(new ItemStack(Material.STONE));
+			}
 		}
 	}
 
-	private void checkItemStack(HumanEntity humanEntity, ItemStack item) {
+	private boolean isItemStackValid(ItemStack item) {
 		if (item == null) {
-			return;
+			return true;
 		}
-		for (int level : item.getEnchantments().values()) {
-			if (level > config.fix127maxlevel) {
-				item.setType(Material.STONE);
-				return;
+		try {
+			Map<Enchantment, Integer> enchants = item.getEnchantments();
+			if (enchants.size() > 5) {
+				return false;
 			}
+			for (Entry<Enchantment, Integer> entry : enchants.entrySet()) {
+				if (entry.getValue() > entry.getKey().getMaxLevel()) {
+					return false;
+				}
+			}
+		} catch (Exception e) {
+			return false;
 		}
+		return true;
 	}
 
 }
