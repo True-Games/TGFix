@@ -35,7 +35,6 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new JoinSpawnTeleport(this, config), this);
 		getServer().getPluginManager().registerEvents(new EssentialsTPA(config), this);
 		getServer().getPluginManager().registerEvents(new ChatLimiter(this, config), this);
-		getServer().getPluginManager().registerEvents(new AnvilInteractFix(config), this);
 		getServer().getPluginManager().registerEvents(new VehicleCommandsRestrict(config), this);
 		getServer().getPluginManager().registerEvents(new CommandLocaleFix(this, config), this);
 		getServer().getPluginManager().registerEvents(new NegativePayFix(config), this);

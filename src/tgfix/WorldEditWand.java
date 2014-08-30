@@ -52,9 +52,13 @@ public class WorldEditWand implements Listener {
 	private org.bukkit.Material wandmaterial = org.bukkit.Material.WOOD_AXE;
 	private String wandname = ChatColor.LIGHT_PURPLE + "Selection wand";
 
-	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onCommand(PlayerCommandPreprocessEvent event) {
-		if (event.getMessage().trim().equalsIgnoreCase(wandcommand)) {
+		if (!config.customwandenabled) {
+			return;
+		}
+
+		if (event.getMessage().trim().toLowerCase().startsWith(wandcommand)) {
 			org.bukkit.inventory.ItemStack wand = new org.bukkit.inventory.ItemStack(wandmaterial);
 			org.bukkit.inventory.meta.ItemMeta im = Bukkit.getItemFactory().getItemMeta(wandmaterial);
 			im.setDisplayName(wandname);

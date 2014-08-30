@@ -44,8 +44,6 @@ public class Config {
 	public boolean joinspawnteleportenabled = true;
 	public HashSet<String> joinspawnteleportworlds = new HashSet<String>();
 
-	public boolean anvilinteractfixenabled = true;
-
 	public boolean vechiclecommandsrestrictenabled = true;
 
 	public boolean commandlocalefixenabled = true;
@@ -70,8 +68,6 @@ public class Config {
 		joinspawnteleportenabled = config.getBoolean("joinspawnteleport.enabled", joinspawnteleportenabled);
 		joinspawnteleportworlds = new HashSet<String>(config.getStringList("joinspawnteleport.worlds"));
 
-		anvilinteractfixenabled = config.getBoolean("anvilplacefix.enabled", anvilinteractfixenabled);
-
 		vechiclecommandsrestrictenabled = config.getBoolean("vechiclecommandsrestrict.enabled", vechiclecommandsrestrictenabled);
 
 		commandlocalefixenabled = config.getBoolean("commandlocalefix.enabled", commandlocalefixenabled);
@@ -92,8 +88,6 @@ public class Config {
 
 		config.set("joinspawnteleport.enabled", joinspawnteleportenabled);
 		config.set("joinspawnteleport.worlds", new ArrayList<String>(joinspawnteleportworlds));
-
-		config.set("anvilplacefix.enabled", anvilinteractfixenabled);
 
 		config.set("vechiclecommandsrestrict.enabled", vechiclecommandsrestrictenabled);
 
