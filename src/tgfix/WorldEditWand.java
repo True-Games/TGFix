@@ -152,7 +152,7 @@ public class WorldEditWand implements Listener {
 		}
 
 		org.bukkit.entity.Entity edamager = event.getDamager();
-		if (edamager instanceof Player) {
+		if (edamager instanceof org.bukkit.entity.Player) {
 			org.bukkit.inventory.ItemStack item = ((org.bukkit.entity.Player) edamager).getItemInHand();
 			if (item.getType() == wandmaterial && item.hasItemMeta() && wandname.equalsIgnoreCase(item.getItemMeta().getDisplayName())) {
 				event.setCancelled(true);
