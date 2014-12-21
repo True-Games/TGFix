@@ -36,16 +36,17 @@ import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.entity.Player;
+import com.sk89q.worldedit.extension.platform.permission.ActorSelectorLimits;
 
 public class WorldEditWand implements Listener {
 
 	private Config config;
 
-	private WorldEditPlugin we;
+	private WorldEditPlugin worldedit;
 
 	public WorldEditWand(Config config) {
 		this.config = config;
-		we = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
+		worldedit = (WorldEditPlugin) Bukkit.getPluginManager().getPlugin("WorldEdit");
 	}
 
 	private String wandcommand = "//wand";
@@ -81,14 +82,14 @@ public class WorldEditWand implements Listener {
 			event.setCancelled(true);
 			org.bukkit.block.Block block = event.getBlock();
 			if (block != null) {
-				Player bplayer = we.wrapPlayer(player);
-				LocalSession session = we.getSession(player);
+				Player weplayer = worldedit.wrapPlayer(player);
+				LocalSession session = worldedit.getSession(player);
 				Vector vector = new Vector(block.getX(), block.getY(), block.getZ());
-		        if (!session.getRegionSelector(bplayer.getWorld()).selectPrimary(vector)) {
-		            bplayer.printError("Position already set.");
+		        if (!session.getRegionSelector(weplayer.getWorld()).selectPrimary(vector, ActorSelectorLimits.forActor(weplayer))) {
+		            weplayer.printError("Position already set.");
 		            return;
 		        }
-				session.getRegionSelector(bplayer.getWorld()).explainPrimarySelection(bplayer, session, vector);
+				session.getRegionSelector(weplayer.getWorld()).explainPrimarySelection(weplayer, session, vector);
 			}
 		}
 	}
@@ -105,14 +106,14 @@ public class WorldEditWand implements Listener {
 			event.setCancelled(true);
 			org.bukkit.block.Block block = event.getBlock();
 			if (block != null) {
-				Player bplayer = we.wrapPlayer(player);
-				LocalSession session = we.getSession(player);
+				Player weplayer = worldedit.wrapPlayer(player);
+				LocalSession session = worldedit.getSession(player);
 				Vector vector = new Vector(block.getX(), block.getY(), block.getZ());
-		        if (!session.getRegionSelector(bplayer.getWorld()).selectPrimary(vector)) {
-		            bplayer.printError("Position already set.");
+		        if (!session.getRegionSelector(weplayer.getWorld()).selectPrimary(vector, ActorSelectorLimits.forActor(weplayer))) {
+		            weplayer.printError("Position already set.");
 		            return;
 		        }
-				session.getRegionSelector(bplayer.getWorld()).explainPrimarySelection(bplayer, session, vector);
+				session.getRegionSelector(weplayer.getWorld()).explainPrimarySelection(weplayer, session, vector);
 			}
 		}
 	}
@@ -133,14 +134,14 @@ public class WorldEditWand implements Listener {
 			event.setCancelled(true);
 			org.bukkit.block.Block block = event.getClickedBlock();
 			if (block != null) {
-				Player bplayer = we.wrapPlayer(player);
-				LocalSession session = we.getSession(player);
+				Player weplayer = worldedit.wrapPlayer(player);
+				LocalSession session = worldedit.getSession(player);
 				Vector vector = new Vector(block.getX(), block.getY(), block.getZ());
-		        if (!session.getRegionSelector(bplayer.getWorld()).selectSecondary(vector)) {
-		            bplayer.printError("Position already set.");
+		        if (!session.getRegionSelector(weplayer.getWorld()).selectSecondary(vector, ActorSelectorLimits.forActor(weplayer))) {
+		            weplayer.printError("Position already set.");
 		            return;
 		        }
-				session.getRegionSelector(bplayer.getWorld()).explainSecondarySelection(bplayer, session, vector);
+				session.getRegionSelector(weplayer.getWorld()).explainSecondarySelection(weplayer, session, vector);
 			}
 		}
 	}

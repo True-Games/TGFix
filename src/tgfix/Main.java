@@ -19,10 +19,11 @@ package tgfix;
 
 import java.io.File;
 
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 //some fixes and functions for my servers
-public class Main extends JavaPlugin {
+public class Main extends JavaPlugin implements Listener {
 
 	public Config config;
 
@@ -40,6 +41,7 @@ public class Main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new NegativePayFix(config), this);
 		getServer().getPluginManager().registerEvents(new WorldEditWand(config), this);
 		getServer().getPluginManager().registerEvents(new Fix127(config), this);
+		getServer().getPluginManager().registerEvents(this, this);
 	}
 
 	@Override
