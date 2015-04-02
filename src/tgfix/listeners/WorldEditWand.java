@@ -15,7 +15,7 @@
  *
  */
 
-package tgfix;
+package tgfix.listeners;
 
 import java.util.Iterator;
 
@@ -31,6 +31,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+
+import tgfix.Config;
 
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.Vector;

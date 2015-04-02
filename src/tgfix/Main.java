@@ -22,6 +22,16 @@ import java.io.File;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import tgfix.listeners.ChatLimiter;
+import tgfix.listeners.CommandLocaleFix;
+import tgfix.listeners.DoorRecoil;
+import tgfix.listeners.EssentialsTPA;
+import tgfix.listeners.Fix127;
+import tgfix.listeners.JoinSpawnTeleport;
+import tgfix.listeners.NegativePayFix;
+import tgfix.listeners.VehicleCommandsRestrict;
+import tgfix.listeners.WorldEditWand;
+
 //some fixes and functions for my servers
 public class Main extends JavaPlugin implements Listener {
 

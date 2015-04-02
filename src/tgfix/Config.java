@@ -36,6 +36,7 @@ public class Config {
 	public boolean chatlimiterenabled = true;
 	public int chatlimitermsecdiff = 5000;
 	public int chatlimitermaxmessagecount = 120;
+	public boolean chatallowasciionly = true;
 
 	public boolean doorrecoilenabled = true;
 
@@ -60,6 +61,7 @@ public class Config {
 		chatlimiterenabled = config.getBoolean("chatlimiter.enabled", chatlimiterenabled);
 		chatlimitermsecdiff = config.getInt("chatlimiter.msecdiff", chatlimitermsecdiff);
 		chatlimitermaxmessagecount = config.getInt("chatlimiter.maxmessagecount", chatlimitermaxmessagecount);
+		chatallowasciionly = config.getBoolean("chatlimiter.allowasciionly", chatallowasciionly);
 
 		doorrecoilenabled = config.getBoolean("doorrecoil.enabled",	doorrecoilenabled);
 
@@ -81,6 +83,7 @@ public class Config {
 		config.set("chatlimiter.enabled", chatlimiterenabled);
 		config.set("chatlimiter.msecdiff", chatlimitermsecdiff);
 		config.set("chatlimiter.maxmessagecount", chatlimitermaxmessagecount);
+		config.set("chatlimiter.allowasciionly", chatallowasciionly);
 
 		config.set("doorrecoil.enabled", doorrecoilenabled);
 

@@ -15,7 +15,7 @@
  *
  */
 
-package tgfix;
+package tgfix.listeners;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,6 +28,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+
+import tgfix.Config;
 
 public class Fix127 implements Listener {
 

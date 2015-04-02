@@ -20,9 +20,6 @@ package tgfix;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.RemoteConsoleCommandSender;
-import org.bukkit.entity.Player;
 
 public class Commands implements CommandExecutor {
 
@@ -34,7 +31,7 @@ public class Commands implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String arg2, String[] args) {
-		if (this.isAllowed(sender, command.getName(), args)) {
+		if (sender.hasPermission("tgfix.reload")) {
 			if (args.length == 1 && args[0].equalsIgnoreCase("help")) {
 				sender.sendMessage("/tgfix reload - перезагрузить конфиг");
 				return true;
@@ -44,19 +41,6 @@ public class Commands implements CommandExecutor {
 				return true;
 			}
 		}
-		return false;
-	}
-
-	private boolean isAllowed(CommandSender sender, final String commandName, String[] args) {
-		if ((sender instanceof Player)) {
-			Player player = (Player) sender;
-			if (player.hasPermission("amrcci.reload")) {
-				return true;
-			}
-		} else if (sender instanceof ConsoleCommandSender || sender instanceof RemoteConsoleCommandSender) {
-			return true;
-		}
-
 		return false;
 	}
 
