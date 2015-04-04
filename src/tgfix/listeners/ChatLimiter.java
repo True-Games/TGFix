@@ -18,7 +18,6 @@
 package tgfix.listeners;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -35,7 +34,7 @@ import tgfix.Main;
 public class ChatLimiter implements Listener {
 
 	private Main main;
-	private Config config;
+	protected Config config;
 
 	public ChatLimiter(Main main, Config config) {
 		this.main = main;
@@ -45,59 +44,58 @@ public class ChatLimiter implements Listener {
 	protected final ConcurrentHashMap<String, Long> playerspeaktime = new ConcurrentHashMap<String, Long>();
 	protected final ConcurrentHashMap<String, Integer> playerspeakcount = new ConcurrentHashMap<String, Integer>();
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onChat(AsyncPlayerChatEvent e) {
+	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+	public void onChat(final AsyncPlayerChatEvent e) {
 		if (!config.chatlimiterenabled || e.getPlayer().hasPermission("tgfix.bypass")) {
 			return;
 		}
-		Player player = e.getPlayer();
+		final Player player = e.getPlayer();
 		if (config.chatallowasciionly) {
 			if (!player.hasPermission("tgfix.chatallowunicode")) {
 				String message = e.getMessage();
 				StringBuilder newmessage = new StringBuilder();
 				for (int i = 0; i < e.getMessage().length(); i++) {
-					if (message.charAt(i) < 255) {
-						newmessage.append(message.charAt(i));
+					char c = message.charAt(i);
+					if (c < 128 || Character.isLetterOrDigit(c)) {
+						newmessage.append(c);
 					}
 				}
 				if (message.length() != newmessage.length()) {
-					player.sendMessage(ChatColor.RED+"Запрещено использовать не ascii символы в сообщении, они были автоматически удалены");
+					player.sendMessage(ChatColor.RED+"Запрещено использовать не буквенные unicode символы в сообщении, они были автоматически удалены");
 					e.setMessage(newmessage.toString());
 				}
 			}
 		}
 		final String playername = e.getPlayer().getName();
-		Long lastSpeak = playerspeaktime.get(playername);
-		if (lastSpeak != null && System.currentTimeMillis() - lastSpeak < config.chatlimitermsecdiff) {
-			player.sendMessage(ChatColor.RED + "Можно говорить только раз в " + config.chatlimitermsecdiff / 1000 + " секунд");
-			e.setCancelled(true);
-			return;
-		} else {
-			playerspeaktime.put(playername, System.currentTimeMillis());
-		}
-		Integer speakCount = playerspeakcount.get(playername);
-		if (speakCount != null) {
-			if (speakCount > config.chatlimitermaxmessagecount) {
-				player.sendMessage(ChatColor.RED + "Вы исчерпали свой лимит сообщений на этот час");
+		playerspeaktime.compute(playername, (key, lastSpeak) -> {
+			long current = System.currentTimeMillis();
+			if (lastSpeak != null && current - lastSpeak < config.chatlimitermsecdiff)  {
+				player.sendMessage(ChatColor.RED + "Можно говорить только раз в " + config.chatlimitermsecdiff / 1000 + " секунд");
 				e.setCancelled(true);
-				return;
+				return lastSpeak;
 			} else {
-				playerspeakcount.computeIfPresent(playername, new BiFunction<String, Integer, Integer>() {
-					@Override
-					public Integer apply(String playername, Integer cSpeakCount) {
-						return cSpeakCount+1;
-					}
-				});
+				return current;
 			}
-		} else {
-			playerspeakcount.putIfAbsent(playername, 1);
-			Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
-				@Override
-				public void run() {
-					playerspeakcount.remove(playername);
+		});
+		playerspeakcount.compute(playername, (key, speakCount) -> {
+			if (speakCount != null) {
+				if (speakCount > config.chatlimitermaxmessagecount) {
+					player.sendMessage(ChatColor.RED + "Вы исчерпали свой лимит сообщений на этот час");
+					e.setCancelled(true);
+					return speakCount;
+				} else {
+					return speakCount+1;
 				}
-			}, 20 * 60 * 60);
-		}
+			} else {
+				Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
+					@Override
+					public void run() {
+						playerspeakcount.remove(key);
+					}
+				}, 20 * 60 * 60);
+				return 1;
+			}
+		});
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
