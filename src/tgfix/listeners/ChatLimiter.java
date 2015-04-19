@@ -19,30 +19,26 @@ package tgfix.listeners;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import tgfix.Config;
-import tgfix.Main;
 
 public class ChatLimiter implements Listener {
 
-	private Main main;
 	protected Config config;
 
-	public ChatLimiter(Main main, Config config) {
-		this.main = main;
+	public ChatLimiter(Config config) {
 		this.config = config;
 	}
 
-	protected final ConcurrentHashMap<String, Long> playerspeaktime = new ConcurrentHashMap<String, Long>();
-	protected final ConcurrentHashMap<String, Integer> playerspeakcount = new ConcurrentHashMap<String, Integer>();
+	protected static final long HOURDIFF = 1000L * 60L * 60L;
+
+	protected final ConcurrentHashMap<String, SpeakInfo> speakinfo = new ConcurrentHashMap<String, SpeakInfo>();
 
 	@EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
 	public void onChat(final AsyncPlayerChatEvent e) {
@@ -66,42 +62,39 @@ public class ChatLimiter implements Listener {
 				}
 			}
 		}
-		final String playername = e.getPlayer().getName();
-		playerspeaktime.compute(playername, (key, lastSpeak) -> {
-			long current = System.currentTimeMillis();
-			if (lastSpeak != null && current - lastSpeak < config.chatlimitermsecdiff)  {
+		speakinfo.compute(e.getPlayer().getName(), (key, speakInfo) -> {
+			if (speakInfo == null) {
+				return new SpeakInfo();
+			}
+			long currentTime = System.currentTimeMillis();
+			if (currentTime - speakInfo.lastSpeak < config.chatlimitermsecdiff) {
 				player.sendMessage(ChatColor.RED + "Можно говорить только раз в " + config.chatlimitermsecdiff / 1000 + " секунд");
 				e.setCancelled(true);
-				return lastSpeak;
 			} else {
-				return current;
+				speakInfo.lastSpeak = currentTime;
 			}
-		});
-		playerspeakcount.compute(playername, (key, speakCount) -> {
-			if (speakCount != null) {
-				if (speakCount > config.chatlimitermaxmessagecount) {
+			if (speakInfo.speakCount > config.chatlimitermaxmessagecount) {
+				if (currentTime - speakInfo.firstSpeak < HOURDIFF) {
 					player.sendMessage(ChatColor.RED + "Вы исчерпали свой лимит сообщений на этот час");
 					e.setCancelled(true);
-					return speakCount;
 				} else {
-					return speakCount+1;
+					speakInfo.firstSpeak = System.currentTimeMillis();
+					speakInfo.speakCount = 0;
 				}
 			} else {
-				Bukkit.getScheduler().scheduleSyncDelayedTask(main, new Runnable() {
-					@Override
-					public void run() {
-						playerspeakcount.remove(key);
-					}
-				}, 20 * 60 * 60);
-				return 1;
+				speakInfo.speakCount++;
 			}
+			return speakInfo;
 		});
 	}
 
-	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onQuit(PlayerQuitEvent event) {
-		playerspeakcount.remove(event.getPlayer().getName());
-		playerspeaktime.remove(event.getPlayer().getName());
+	private static class SpeakInfo {
+
+		private long lastSpeak = System.currentTimeMillis();
+
+		private long firstSpeak = System.currentTimeMillis();
+		private int speakCount = 1;
+
 	}
 
 }

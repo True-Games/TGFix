@@ -31,7 +31,6 @@ import tgfix.listeners.JoinSpawnTeleport;
 import tgfix.listeners.NegativePayFix;
 import tgfix.listeners.VehicleCommandsRestrict;
 
-//some fixes and functions for my servers
 public class Main extends JavaPlugin implements Listener {
 
 	public Config config;
@@ -44,7 +43,7 @@ public class Main extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(new DoorRecoil(config), this);
 		getServer().getPluginManager().registerEvents(new JoinSpawnTeleport(this, config), this);
 		getServer().getPluginManager().registerEvents(new EssentialsTPA(config), this);
-		getServer().getPluginManager().registerEvents(new ChatLimiter(this, config), this);
+		getServer().getPluginManager().registerEvents(new ChatLimiter(config), this);
 		getServer().getPluginManager().registerEvents(new VehicleCommandsRestrict(config), this);
 		getServer().getPluginManager().registerEvents(new CommandLocaleFix(this, config), this);
 		getServer().getPluginManager().registerEvents(new NegativePayFix(config), this);
