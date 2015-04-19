@@ -30,7 +30,6 @@ import tgfix.listeners.Fix127;
 import tgfix.listeners.JoinSpawnTeleport;
 import tgfix.listeners.NegativePayFix;
 import tgfix.listeners.VehicleCommandsRestrict;
-import tgfix.listeners.WorldEditWand;
 
 //some fixes and functions for my servers
 public class Main extends JavaPlugin implements Listener {
@@ -49,7 +48,6 @@ public class Main extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(new VehicleCommandsRestrict(config), this);
 		getServer().getPluginManager().registerEvents(new CommandLocaleFix(this, config), this);
 		getServer().getPluginManager().registerEvents(new NegativePayFix(config), this);
-		getServer().getPluginManager().registerEvents(new WorldEditWand(config), this);
 		getServer().getPluginManager().registerEvents(new Fix127(config), this);
 		getServer().getPluginManager().registerEvents(this, this);
 	}
