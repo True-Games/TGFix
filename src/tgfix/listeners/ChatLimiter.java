@@ -17,6 +17,7 @@
 
 package tgfix.listeners;
 
+import java.lang.Character.UnicodeBlock;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.ChatColor;
@@ -49,15 +50,13 @@ public class ChatLimiter implements Listener {
 		if (config.chatallowasciionly) {
 			if (!player.hasPermission("tgfix.chatallowunicode")) {
 				String message = e.getMessage();
-				StringBuilder newmessage = new StringBuilder();
-				for (int i = 0; i < e.getMessage().length(); i++) {
-					char c = message.charAt(i);
-					if (c < 128 || Character.isLetterOrDigit(c)) {
-						newmessage.append(c);
-					}
-				}
+				StringBuilder newmessage = new StringBuilder(message.length());
+				message
+				.codePoints()
+				.filter(codepoint -> isAllowedSymbol(codepoint))
+				.forEach(codepoint -> newmessage.append(Character.toChars(codepoint)));
 				if (message.length() != newmessage.length()) {
-					player.sendMessage(ChatColor.RED+"Запрещено использовать не буквенные unicode символы в сообщении, они были автоматически удалены");
+					player.sendMessage(ChatColor.RED+"Запрещено использовать unicode символы в сообщении, они были автоматически удалены");
 					e.setMessage(newmessage.toString());
 				}
 			}
@@ -86,6 +85,10 @@ public class ChatLimiter implements Listener {
 			}
 			return speakInfo;
 		});
+	}
+
+	private boolean isAllowedSymbol(int codepoint) {
+		return codepoint < 128 || UnicodeBlock.of(codepoint).equals(UnicodeBlock.CYRILLIC);
 	}
 
 	private static class SpeakInfo {
