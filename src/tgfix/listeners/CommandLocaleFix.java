@@ -120,58 +120,61 @@ public class CommandLocaleFix implements Listener {
 	}
 
 	private static class LocaleInverter {
-		private final HashMap<Character, Character> r2e = new HashMap<Character, Character>();
-		private final HashMap<Character, Character> e2r = new HashMap<Character, Character>();
+
+		private final HashMap<Integer, Integer> r2e = new HashMap<Integer, Integer>();
+		private final HashMap<Integer, Integer> e2r = new HashMap<Integer, Integer>();
 		public LocaleInverter() {
-			r2e.put('й', 'q'); r2e.put('Й', 'Q');
-			r2e.put('ц', 'w'); r2e.put('Ц', 'W');
-			r2e.put('у', 'e'); r2e.put('У', 'E');
-			r2e.put('к', 'r'); r2e.put('К', 'R');
-			r2e.put('е', 't'); r2e.put('Е', 'T');
-			r2e.put('н', 'y'); r2e.put('Н', 'Y');
-			r2e.put('г', 'u'); r2e.put('Г', 'U');
-			r2e.put('ш', 'i'); r2e.put('Ш', 'I');
-			r2e.put('щ', 'o'); r2e.put('Щ', 'O');
-			r2e.put('з', 'p'); r2e.put('З', 'P');
-			r2e.put('х', '['); r2e.put('Х', '{');
-			r2e.put('ъ', ']'); r2e.put('Ъ', '}');
-			r2e.put('ф', 'a'); r2e.put('Ф', 'A');
-			r2e.put('ы', 's'); r2e.put('Ы', 'S');
-			r2e.put('в', 'd'); r2e.put('В', 'D');
-			r2e.put('а', 'f'); r2e.put('А', 'F');
-			r2e.put('п', 'g'); r2e.put('П', 'G');
-			r2e.put('р', 'h'); r2e.put('Р', 'H');
-			r2e.put('о', 'j'); r2e.put('О', 'J');
-			r2e.put('л', 'k'); r2e.put('Л', 'K');
-			r2e.put('д', 'l'); r2e.put('Д', 'L');
-			r2e.put('ж', ';'); r2e.put('Ж', ':');
-			r2e.put('э', '\''); r2e.put('Э', '"');
-			r2e.put('я', 'z'); r2e.put('Я', 'Z');
-			r2e.put('ч', 'x'); r2e.put('Ч', 'X');
-			r2e.put('с', 'c'); r2e.put('С', 'C');
-			r2e.put('м', 'v'); r2e.put('М', 'V');
-			r2e.put('и', 'b'); r2e.put('И', 'B');
-			r2e.put('т', 'n'); r2e.put('Т', 'N');
-			r2e.put('ь', 'm'); r2e.put('Ь', 'M');
-			r2e.put('б', ','); r2e.put('Б', '<');
-			r2e.put('ю', '.'); r2e.put('Ю', '>');
-			r2e.put('.', '/'); r2e.put(',', '?');
-			for (Entry<Character, Character> entry : r2e.entrySet()) {
+			addMapping('й', 'q'); addMapping('Й', 'Q');
+			addMapping('ц', 'w'); addMapping('Ц', 'W');
+			addMapping('у', 'e'); addMapping('У', 'E');
+			addMapping('к', 'r'); addMapping('К', 'R');
+			addMapping('е', 't'); addMapping('Е', 'T');
+			addMapping('н', 'y'); addMapping('Н', 'Y');
+			addMapping('г', 'u'); addMapping('Г', 'U');
+			addMapping('ш', 'i'); addMapping('Ш', 'I');
+			addMapping('щ', 'o'); addMapping('Щ', 'O');
+			addMapping('з', 'p'); addMapping('З', 'P');
+			addMapping('х', '['); addMapping('Х', '{');
+			addMapping('ъ', ']'); addMapping('Ъ', '}');
+			addMapping('ф', 'a'); addMapping('Ф', 'A');
+			addMapping('ы', 's'); addMapping('Ы', 'S');
+			addMapping('в', 'd'); addMapping('В', 'D');
+			addMapping('а', 'f'); addMapping('А', 'F');
+			addMapping('п', 'g'); addMapping('П', 'G');
+			addMapping('р', 'h'); addMapping('Р', 'H');
+			addMapping('о', 'j'); addMapping('О', 'J');
+			addMapping('л', 'k'); addMapping('Л', 'K');
+			addMapping('д', 'l'); addMapping('Д', 'L');
+			addMapping('ж', ';'); addMapping('Ж', ':');
+			addMapping('э', '\''); addMapping('Э', '"');
+			addMapping('я', 'z'); addMapping('Я', 'Z');
+			addMapping('ч', 'x'); addMapping('Ч', 'X');
+			addMapping('с', 'c'); addMapping('С', 'C');
+			addMapping('м', 'v'); addMapping('М', 'V');
+			addMapping('и', 'b'); addMapping('И', 'B');
+			addMapping('т', 'n'); addMapping('Т', 'N');
+			addMapping('ь', 'm'); addMapping('Ь', 'M');
+			addMapping('б', ','); addMapping('Б', '<');
+			addMapping('ю', '.'); addMapping('Ю', '>');
+			addMapping('.', '/'); addMapping(',', '?');
+			for (Entry<Integer, Integer> entry : r2e.entrySet()) {
 				e2r.put(entry.getValue(), entry.getKey());
 			}
 		}
 
+		private void addMapping(char from, char to) {
+			r2e.put(Integer.valueOf(from), Integer.valueOf(to));
+		}
+
 		public String invertLocale(String string) {
-			StringBuilder sb = new StringBuilder(255);
-			for (char c : string.toCharArray()) {
-				if (r2e.containsKey(c)) {
-					sb.append(r2e.get(c));
-				} else if (e2r.containsKey(c)) {
-					sb.append(e2r.get(c));
-				} else {
-					sb.append(c);
+			StringBuilder sb = new StringBuilder(string.length());
+			string.codePoints().forEach(codepoint -> {
+				Integer replacement = r2e.get(codepoint);
+				if (replacement == null) {
+					replacement = e2r.get(codepoint);
 				}
-			}
+				sb.append(replacement != null ? Character.toChars(replacement) : Character.toChars(codepoint));
+			});
 			return sb.toString();
 		}
 
