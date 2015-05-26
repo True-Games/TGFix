@@ -71,7 +71,7 @@ public class Fix127 implements Listener {
 				return false;
 			}
 			for (Entry<Enchantment, Integer> entry : enchants.entrySet()) {
-				if (entry.getValue() > entry.getKey().getMaxLevel()) {
+				if (entry.getValue() > config.fix127maxlevel) {
 					return false;
 				}
 			}
